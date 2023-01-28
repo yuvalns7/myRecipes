@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     TextView createNewAccount;
     EditText inputEmail, inputPassword;
     Button btnLogin;
+    String emailPattern= "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
 
     @Override
@@ -35,5 +36,48 @@ public class MainActivity extends AppCompatActivity {
 
         createNewAccount.setOnClickListener(view ->
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class)));
+
+        btnLogin.setOnClickListener(view -> PerformLogin());
+    }
+
+
+    private void PerformLogin() {
+        String email = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
+
+        if(!email.matches(emailPattern)) {
+            inputEmail.setError("Enter correct email");
+            inputEmail.requestFocus();
+        } else if (password.isEmpty() || password.length()<6) {
+            inputPassword.setError("Enter proper password");
+            inputPassword.requestFocus();
+        }  else {
+            progressDialog.setMessage("Please wait while login...");
+            progressDialog.setTitle("Login");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+            loginUser(new User(email, password));
+        }
+    }
+
+    private void loginUser(User user) {
+        UserModel.instance().loginUser(user, (task) -> {
+            if (task.isSuccessful()) {
+                progressDialog.dismiss();
+                sendUserToNextActivity();
+                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void sendUserToNextActivity() {
+        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
