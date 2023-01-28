@@ -37,7 +37,6 @@ public class FirebaseModel {
     FirebaseStorage storage;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    String emailPattern= "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     public FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -68,4 +67,7 @@ public class FirebaseModel {
         });
     }
 
+    public boolean isUserLoggedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
 }

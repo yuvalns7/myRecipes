@@ -44,11 +44,14 @@ public class UserModel {
             listener.onComplete(task);
         });
     }
+
     public void loginUser(User user, Listener<Task<AuthResult>> listener){
         firebaseModel.loginUser(user,(task)->{
             listener.onComplete(task);
         });
     }
 
-
+    public boolean isUserLoggedIn(){
+      return firebaseModel.isUserLoggedIn();
+    }
 }
