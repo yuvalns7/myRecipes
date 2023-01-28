@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.myrecipes.RegisterActivity;
+import com.example.myrecipes.model.recipe.Recipe;
+import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,5 +71,25 @@ public class FirebaseModel {
 
     public boolean isUserLoggedIn() {
         return mAuth.getCurrentUser() != null;
+    }
+
+    public void getAllRecipesSince(Long since, RecipeModel.Listener<List<Recipe>> callback){
+        db.collection(Recipe.COLLECTION)
+                .whereGreaterThanOrEqualTo(Recipe.LAST_UPDATED, new Timestamp(since,0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Recipe> list = new LinkedList<>();
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json: jsonsList){
+                                Recipe recipe = Recipe.fromJson(json.getData());
+                                list.add(recipe);
+                            }
+                        }
+                        callback.onComplete(list);
+                    }
+                });
     }
 }
