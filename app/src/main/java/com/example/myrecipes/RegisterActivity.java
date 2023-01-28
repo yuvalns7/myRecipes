@@ -19,6 +19,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView alreadyHaveAccount;
     EditText inputEmail, inputPassword, inputConfirmPassword;
     Button btnRegister;
+    String emailPattern= "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
 
     @Override
@@ -36,5 +37,50 @@ public class RegisterActivity extends AppCompatActivity {
 
         alreadyHaveAccount.setOnClickListener(view ->
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class)));
+
+        btnRegister.setOnClickListener(view -> PerformAuth());
+    }
+
+    private void PerformAuth() {
+        String email = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
+        String confirmPassword = inputConfirmPassword.getText().toString();
+
+        if(!email.matches(emailPattern)) {
+            inputEmail.setError("Enter correct email");
+            inputEmail.requestFocus();
+        } else if (password.isEmpty() || password.length()<6) {
+            inputPassword.setError("Enter proper password");
+            inputPassword.requestFocus();
+        } else if (!password.equals(confirmPassword)) {
+            inputConfirmPassword.setError("Password not match both fields");
+            inputConfirmPassword.requestFocus();
+        } else {
+            progressDialog.setMessage("Please wait while registration...");
+            progressDialog.setTitle("Registration");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+            registerUser(new User(email, password));
+        }
+    }
+
+    private void registerUser(User user) {
+        UserModel.instance().registerUser(user, (task) -> {
+            if (task.isSuccessful()) {
+                progressDialog.dismiss();
+                sendUserToNextActivity();
+                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendUserToNextActivity() {
+        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
