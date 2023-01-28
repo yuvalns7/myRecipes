@@ -6,13 +6,13 @@ import java.util.List;
 
 public class RecipeSearchResult {
     @SerializedName("meals")
-    List<Recipe> recipes;
+    List<RecipeApiObj> recipes;
 
-    public List<Recipe> getRecipes() {
+    public List<RecipeApiObj> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(List<Recipe> recipesList) {
+    public void setRecipes(List<RecipeApiObj> recipesList) {
         this.recipes = recipesList;
     }
 }

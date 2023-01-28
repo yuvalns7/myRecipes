@@ -1,28 +1,17 @@
 package com.example.myrecipes.model.recipe;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
-import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myrecipes.model.firebase.FirebaseModel;
 import com.example.myrecipes.model.localDB.AppLocalDb;
 import com.example.myrecipes.model.localDB.AppLocalDbRepository;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeModel {
     final public static RecipeModel _instance = new RecipeModel();
@@ -31,45 +20,8 @@ public class RecipeModel {
     private FirebaseModel firebaseModel = new FirebaseModel();
     AppLocalDbRepository localDb = AppLocalDb.getAppDb();
 
-    final String BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
-    Retrofit retrofit;
-    RecipeApi movieApi;
-
     public static RecipeModel instance(){
         return _instance;
-    }
-
-    private RecipeModel(){
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-        movieApi = retrofit.create(RecipeApi.class);
-    }
-
-    public LiveData<List<Recipe>> getRandomRecipe(){
-        MutableLiveData<List<Recipe>> data = new MutableLiveData<>();
-        Call<RecipeSearchResult> call = movieApi.getRandomRecipe();
-        call.enqueue(new Callback<RecipeSearchResult>() {
-            @Override
-            public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
-                if (response.isSuccessful()){
-                    RecipeSearchResult res = response.body();
-                    data.setValue(res.getRecipes());
-                }else{
-                    Log.d("TAG","----- getRandomRecipe response error");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RecipeSearchResult> call, Throwable t) {
-                Log.d("TAG","----- getRandomRecipe fail");
-            }
-        });
-        return data;
     }
 
     public enum LoadingState{
@@ -118,6 +70,4 @@ public class RecipeModel {
             });
         });
     }
-
-
 }
