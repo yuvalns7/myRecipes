@@ -58,7 +58,7 @@ public class UserModel {
     }
 
     public void updateUserProfile(User user, Bitmap bitmap, Listener<Task<Void>> listener){
-        firebaseModel.updateUserProfile(user, null, (task)->{
+        firebaseModel.updateUserProfile(user, bitmap, (task)->{
             listener.onComplete(task);
         });
     }

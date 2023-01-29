@@ -21,11 +21,27 @@
             android:src="@drawable/avatar"
             android:layout_centerVertical="true"/>
 
+        <ImageButton
+            android:id="@+id/galleryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_image_search_24"
+            android:layout_below="@id/profile_image"/>
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profile_image"
+            android:layout_marginLeft="60dp"
+            android:src="@drawable/ic_baseline_photo_camera_24" />
+
         <TextView
             android:id="@+id/full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="40sp"
+            android:text="yuval yuval"
             android:fontFamily="cursive"
             android:layout_toRightOf="@+id/profile_image"
             android:layout_centerVertical="true"
@@ -36,7 +52,7 @@
 
     <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_marginTop="-100dp"
+        android:layout_marginTop="-80dp"
         android:layout_width="match_parent"
         android:padding="20dp"
         android:gravity="center" >
@@ -90,18 +106,6 @@
             android:layout_width="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:drawableLeft="@drawable/ic_baseline_perm_identity_24"
-                android:drawablePadding="10dp"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:hint="E-Mail"
-            android:id="@+id/email_profile"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-            <com.google.android.material.textfield.TextInputEditText
-                android:drawableLeft="@drawable/ic_baseline_alternate_email_24"
                 android:drawablePadding="10dp"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent" />
