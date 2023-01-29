@@ -27,12 +27,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (UserModel.instance().isUserLoggedIn()) {
-            sendUserToNextActivity();
-        } else {
-
-        }
-
         createNewAccount = findViewById(R.id.createNewAccount);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -83,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void sendUserToNextActivity() {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, UserProfileActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
