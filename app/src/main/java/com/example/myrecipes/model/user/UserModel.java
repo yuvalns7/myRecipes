@@ -1,5 +1,6 @@
 package com.example.myrecipes.model.user;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -18,10 +19,7 @@ import java.util.concurrent.Executors;
 public class UserModel {
     private static final UserModel _instance = new UserModel();
 
-    private Executor executor = Executors.newSingleThreadExecutor();
-    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private FirebaseModel firebaseModel = new FirebaseModel();
-    AppLocalDbRepository localDb = AppLocalDb.getAppDb();
 
     public static UserModel instance(){
         return _instance;
@@ -39,7 +37,7 @@ public class UserModel {
     }
     final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<LoadingState>(LoadingState.NOT_LOADING);
 
-    public void registerUser(User user, Listener<Task<AuthResult>> listener){
+    public void registerUser(User user, Listener<Task<Void>> listener){
         firebaseModel.registerUser(user,(task)->{
             listener.onComplete(task);
         });
@@ -53,5 +51,15 @@ public class UserModel {
 
     public boolean isUserLoggedIn(){
       return firebaseModel.isUserLoggedIn();
+    }
+
+    public User getUserProfileDetails() {
+        return firebaseModel.getUserProfileDetails();
+    }
+
+    public void updateUserProfile(User user, Bitmap bitmap, Listener<Task<Void>> listener){
+        firebaseModel.updateUserProfile(user, null, (task)->{
+            listener.onComplete(task);
+        });
     }
 }
