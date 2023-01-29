@@ -17,7 +17,7 @@ import com.example.myrecipes.model.user.UserModel;
 public class RegisterActivity extends AppCompatActivity {
 
     TextView alreadyHaveAccount;
-    EditText inputEmail, inputPassword, inputConfirmPassword;
+    EditText inputEmail, inputFullName, inputUserName, inputPassword, inputConfirmPassword;
     Button btnRegister;
     String emailPattern= "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         alreadyHaveAccount = findViewById(R.id.alreadyHaveAccount);
         inputEmail = findViewById(R.id.inputEmail);
+        inputFullName = findViewById(R.id.inputFullName);
         inputPassword = findViewById(R.id.inputPassword);
         inputConfirmPassword = findViewById(R.id.inputConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
@@ -44,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void PerformAuth() {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
+        String fullName = inputFullName.getText().toString();
         String confirmPassword = inputConfirmPassword.getText().toString();
 
         if(!email.matches(emailPattern)) {
@@ -52,6 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (password.isEmpty() || password.length()<6) {
             inputPassword.setError("Enter proper password");
             inputPassword.requestFocus();
+        } else if (fullName.isEmpty()) {
+            inputFullName.setError("Enter full name");
+            inputFullName.requestFocus();
         } else if (!password.equals(confirmPassword)) {
             inputConfirmPassword.setError("Password not match both fields");
             inputConfirmPassword.requestFocus();
@@ -61,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
-            registerUser(new User(email, password));
+            registerUser(new User(email, password, fullName));
         }
     }
 
@@ -79,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void sendUserToNextActivity() {
-        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, UserProfileActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
