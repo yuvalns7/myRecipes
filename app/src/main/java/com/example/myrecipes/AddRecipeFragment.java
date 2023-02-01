@@ -24,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
+import com.example.myrecipes.model.recipe.Recipe;
+import com.example.myrecipes.model.recipe.RecipeModel;
+import com.example.myrecipes.model.user.UserModel;
 
 public class AddRecipeFragment extends Fragment {
 
@@ -76,7 +79,31 @@ public class AddRecipeFragment extends Fragment {
         View view = binding.getRoot();
 
         binding.saveBtn.setOnClickListener(view1 -> {
+            String name = binding.nameEt.getText().toString();
+            String category = binding.categoryEt.getText().toString();
+            String instructions = binding.instructionsEt.getText().toString();
+            String ingredients = binding.ingredientsEt.getText().toString();
+            String userId = UserModel.instance().getUserProfileDetails().getId();
 
+            Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+
+            if (isAvatarSelected){
+                binding.recipeImg.setDrawingCacheEnabled(true);
+                binding.recipeImg.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
+                RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url->{
+                    if (url != null){
+                        rcp.setImgUrl(url);
+                    }
+                    RecipeModel.instance().addRecipe(rcp, (unused) -> {
+                        Navigation.findNavController(view1).popBackStack();
+                    });
+                });
+            }else {
+                RecipeModel.instance().addRecipe(rcp, (unused) -> {
+                    Navigation.findNavController(view1).popBackStack();
+                });
+            }
         });
 
         binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.userProfileFragment,false));

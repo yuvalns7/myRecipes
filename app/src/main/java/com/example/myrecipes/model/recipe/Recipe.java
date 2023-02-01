@@ -18,36 +18,41 @@ import java.util.Map;
 
 @Entity
 public class Recipe {
+
     @PrimaryKey
     @NonNull
-    private String id="";
     private String name="";
     private String category="";
-    private String area="";
     private String instructions="";
     private String imgUrl="";
-//    private List<String> ingredients = new ArrayList<>();
+    private String ingredients = "";
+    private String userId = "";
     private Long lastUpdated;
 
     public Recipe(){
     }
 
-    public Recipe(@NonNull String id,String name, String category, String area, String instructions, String imgUrl
-//            ,  List<String> ingredients
-    ) {
-        this.id = id;
+    public Recipe(String name, String category, String instructions, String imgUrl, String ingredients, String userId) {
+
         this.name = name;
         this.category = category;
-        this.area = area;
         this.instructions = instructions;
         this.imgUrl = imgUrl;
-//        this.ingredients = ingredients;
+        this.ingredients = ingredients;
+        this.userId = userId;
     }
 
-    static final String ID = "id";
+    public Recipe(String name, String category, String instructions, String ingredients, String userId) {
+        this.name = name;
+        this.category = category;
+        this.instructions = instructions;
+        this.ingredients = ingredients;
+        this.userId = userId;
+    }
+
+    static final String USER_ID = "userId";
     static final String NAME = "name";
     static final String CATEGORY = "category";
-    static final String AREA = "area";
     static final String INSTRUCTIONS = "instructions";
     static final String IMG_URL = "imgUrl";
     static final String INGREDIENTS = "ingredients";
@@ -58,15 +63,14 @@ public class Recipe {
     public static final String LOCAL_LAST_UPDATED = "recipes_local_last_update";
 
     public static Recipe fromJson(Map<String,Object> json){
-        String id = (String)json.get(ID);
         String name = (String)json.get(NAME);
         String category = (String)json.get(CATEGORY);
-        String area = (String)json.get(AREA);
         String instructions = (String) json.get(INSTRUCTIONS);
         String imgUrl = (String) json.get(IMG_URL);
-//        List<String> ingredients = (List<String>) json.get(INGREDIENTS);
+        String ingredients = (String) json.get(INGREDIENTS);
+        String userId = (String) json.get(USER_ID);
 
-        Recipe rcp = new Recipe(id,name, category,area,instructions,imgUrl );
+        Recipe rcp = new Recipe(name, category,instructions,imgUrl, ingredients, userId );
         try{
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             rcp.setLastUpdated(time.getSeconds());
@@ -88,24 +92,14 @@ public class Recipe {
 
     public Map<String,Object> toJson(){
         Map<String, Object> json = new HashMap<>();
-        json.put(ID, getId());
         json.put(NAME, getName());
         json.put(CATEGORY, getCategory());
-        json.put(AREA, getArea());
         json.put(INSTRUCTIONS, getInstructions());
         json.put(IMG_URL, getImgUrl());
-//        json.put(INGREDIENTS, getIngredients());
+        json.put(INGREDIENTS, getIngredients());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
+        json.put(USER_ID, getUserId());
         return json;
-    }
-
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    public void setId(@NonNull String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -124,14 +118,6 @@ public class Recipe {
         this.category = category;
     }
 
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
     public String getInstructions() {
         return instructions;
     }
@@ -148,19 +134,27 @@ public class Recipe {
         this.imgUrl = imgUrl;
     }
 
-//    public List<String> getIngredients() {
-//        return ingredients;
-//    }
-//
-//    public void setIngredients(List<String> ingredients) {
-//        this.ingredients = ingredients;
-//    }
-
     public Long getLastUpdated() {
         return lastUpdated;
     }
 
     public void setLastUpdated(Long lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

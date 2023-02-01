@@ -1,5 +1,6 @@
 package com.example.myrecipes.model.recipe;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -59,15 +60,21 @@ public class RecipeModel {
                         time = rcp.getLastUpdated();
                     }
                 }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 // update local last update
                 Recipe.setLocalLastUpdate(time);
                 EventListLoadingState.postValue(LoadingState.NOT_LOADING);
             });
         });
+    }
+
+    public void addRecipe(Recipe rcp, Listener<Void> listener){
+        firebaseModel.addRecipe(rcp,(Void)->{
+            refreshAllRecipes();
+            listener.onComplete(null);
+        });
+    }
+
+    public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
+        firebaseModel.uploadImage(name,bitmap,listener);
     }
 }

@@ -7,7 +7,7 @@ import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.model.recipe.RecipeDao;
 import com.example.myrecipes.model.user.User;
 
-@Database(entities = {Recipe.class, User.class}, version = 1)
+@Database(entities = {Recipe.class, User.class}, version = 10)
 public abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract RecipeDao recipeDao();
 }

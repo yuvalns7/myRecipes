@@ -40,10 +40,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FirebaseModel {
-    FirebaseFirestore db;
-    FirebaseStorage storage;
-    FirebaseAuth mAuth;
-    FirebaseUser mUser;
+    private FirebaseFirestore db;
+    private FirebaseStorage storage;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     public FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -70,7 +70,6 @@ public class FirebaseModel {
         mAuth.signInWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 mUser=mAuth.getCurrentUser();
                 listener.onComplete(task);
             }
@@ -110,24 +109,18 @@ public class FirebaseModel {
     }
 
     public User getUserProfileDetails() {
-        User user = new User();
         if (mUser != null) {
-            for (UserInfo profile : mUser.getProviderData()) {
-                // Id of the provider (ex: google.com)
-                String providerId = profile.getProviderId();
+            UserInfo profile = mUser.getProviderData().get(0);
+            // UID specific to the provider
+            String uid = profile.getUid();
 
-                // UID specific to the provider
-                String uid = profile.getUid();
+            // Name, email address, and profile photo Url
+            String name = profile.getDisplayName();
+            String email = profile.getEmail();
+            Uri photoUrl = profile.getPhotoUrl();
+            String avatarUrl = photoUrl == null ? null : profile.getPhotoUrl().toString();
 
-                // Name, email address, and profile photo Url
-                String name = profile.getDisplayName();
-                String email = profile.getEmail();
-                Uri photoUrl = profile.getPhotoUrl();
-                String avatarUrl = photoUrl == null ? null : profile.getPhotoUrl().toString();
-
-                user =  new User(uid,email,name, avatarUrl);
-            }
-            return user;
+            return new User(uid,email,name, avatarUrl);
         }
         return null;
     }
@@ -155,5 +148,42 @@ public class FirebaseModel {
     public void logout() {
       mAuth.signOut();
       mUser = null;
+    }
+
+    public void uploadImage(String name, Bitmap bitmap, RecipeModel.Listener<String> listener) {
+        StorageReference storageRef = storage.getReference();
+        StorageReference imagesRef = storageRef.child("images/" + name + ".jpg");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                listener.onComplete(null);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        listener.onComplete(uri.toString());
+                    }
+                });
+            }
+        });
+
+    }
+
+    public void addRecipe(Recipe rcp, RecipeModel.Listener<Void> listener) {
+        db.collection(Recipe.COLLECTION).document(rcp.getName()).set(rcp.toJson())
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    listener.onComplete(null);
+                }
+            });
     }
 }
