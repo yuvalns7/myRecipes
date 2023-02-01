@@ -11,4 +11,10 @@
         android:label="my profile"
         tools:layout="@layout/fragment_user_profile">
     </fragment>
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.example.myrecipes.AddRecipeFragment"
+        android:label="add recipe"
+        tools:layout="@layout/fragment_add_recipe">
+    </fragment>
 </navigation>
