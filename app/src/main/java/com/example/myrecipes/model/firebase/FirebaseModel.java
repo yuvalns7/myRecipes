@@ -70,6 +70,8 @@ public class FirebaseModel {
         mAuth.signInWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                mUser=mAuth.getCurrentUser();
                 listener.onComplete(task);
             }
         });
@@ -148,5 +150,10 @@ public class FirebaseModel {
                         callback.onComplete(list);
                     }
                 });
+    }
+
+    public void logout() {
+      mAuth.signOut();
+      mUser = null;
     }
 }

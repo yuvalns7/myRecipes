@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (UserModel.instance().isUserLoggedIn()) {
-            sendUserToNextActivity(UserProfileActivity.class);
+            sendUserToNextActivity(HomeActivity.class);
         } else {
             sendUserToNextActivity(LoginActivity.class);
         }

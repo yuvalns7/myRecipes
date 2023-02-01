@@ -28,7 +28,7 @@ public class RecipeModel {
         LOADING,
         NOT_LOADING
     }
-    final public MutableLiveData<LoadingState> EventStudentsListLoadingState = new MutableLiveData<LoadingState>(LoadingState.NOT_LOADING);
+    final public MutableLiveData<LoadingState> EventListLoadingState = new MutableLiveData<LoadingState>(LoadingState.NOT_LOADING);
 
     public interface Listener<T>{
         void onComplete(T data);
@@ -44,7 +44,7 @@ public class RecipeModel {
     }
 
     public void refreshAllRecipes(){
-        EventStudentsListLoadingState.setValue(LoadingState.LOADING);
+        EventListLoadingState.setValue(LoadingState.LOADING);
         // get local last update
         Long localLastUpdate = Recipe.getLocalLastUpdate();
         // get all updated recorde from firebase since local last update
@@ -66,7 +66,7 @@ public class RecipeModel {
                 }
                 // update local last update
                 Recipe.setLocalLastUpdate(time);
-                EventStudentsListLoadingState.postValue(LoadingState.NOT_LOADING);
+                EventListLoadingState.postValue(LoadingState.NOT_LOADING);
             });
         });
     }

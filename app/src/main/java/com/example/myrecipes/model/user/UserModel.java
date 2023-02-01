@@ -27,6 +27,10 @@ public class UserModel {
     private UserModel(){
     }
 
+    public void logout() {
+        firebaseModel.logout();
+    }
+
     public interface Listener<T>{
         void onComplete(T data);
     }

@@ -66,13 +66,15 @@ public class UserProfileFragment extends Fragment {
         View view = binding.getRoot();
         user = UserModel.instance().getUserProfileDetails();
 
-        binding.fullName.setText(user.getName());
-        binding.fullNameProfile.getEditText().setText(user.getName());
+        if (user!= null) {
+            binding.fullName.setText(user.getName());
+            binding.fullNameProfile.getEditText().setText(user.getName());
 
-        if (user.getAvatarUrl() != null && user.getAvatarUrl().length() > 5) {
-            Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.avatar).into(binding.profileImage);
-        }else{
-            binding.profileImage.setImageResource(R.drawable.avatar);
+            if (user.getAvatarUrl() != null && user.getAvatarUrl().length() > 5) {
+                Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.avatar).into(binding.profileImage);
+            }else{
+                binding.profileImage.setImageResource(R.drawable.avatar);
+            }
         }
 
         binding.updateProfileBtn.setOnClickListener((view1) -> {
@@ -98,7 +100,6 @@ public class UserProfileFragment extends Fragment {
                 });
             }
         });
-
 
 
         binding.cameraButton.setOnClickListener(view1->{
