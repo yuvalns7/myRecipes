@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myrecipes.model.firebase.FirebaseModel;
 import com.example.myrecipes.model.localDB.AppLocalDb;
 import com.example.myrecipes.model.localDB.AppLocalDbRepository;
+import com.example.myrecipes.model.recipe.RecipeModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
@@ -29,6 +30,7 @@ public class UserModel {
 
     public void logout() {
         firebaseModel.logout();
+        RecipeModel.instance().resetDataOnLogout();
     }
 
     public interface Listener<T>{
@@ -59,6 +61,10 @@ public class UserModel {
 
     public User getUserProfileDetails() {
         return firebaseModel.getUserProfileDetails();
+    }
+
+    public String getUserId() {
+        return firebaseModel.getUserId();
     }
 
     public void updateUserProfile(User user, Bitmap bitmap, Listener<Task<Void>> listener){

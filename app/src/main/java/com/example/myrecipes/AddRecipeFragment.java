@@ -94,7 +94,7 @@ public class AddRecipeFragment extends Fragment {
             String category = binding.categoryEt.getText().toString();
             String instructions = binding.instructionsEt.getText().toString();
             String ingredients = binding.ingredientsEt.getText().toString();
-            String userId = UserModel.instance().getUserProfileDetails().getId();
+            String userId = UserModel.instance().getUserId();
 
             if (isRecipeFormValid(name, category,instructions, ingredients)) {
                 Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);

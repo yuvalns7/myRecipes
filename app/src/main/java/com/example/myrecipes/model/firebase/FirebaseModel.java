@@ -186,4 +186,25 @@ public class FirebaseModel {
                 }
             });
     }
+
+    public void getUserRecipeCount(RecipeModel.Listener<Integer> callback) {
+        db.collection(Recipe.COLLECTION)
+                .whereEqualTo(Recipe.USER_ID, getUserId()).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Recipe> list = new LinkedList<>();
+                        Integer count = -1;
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonsList = task.getResult();
+                            count = jsonsList.size();
+                        }
+                        callback.onComplete(count);
+                    }
+                });
+    }
+
+    public String getUserId() {
+        return getUserProfileDetails().getId();
+    }
 }
