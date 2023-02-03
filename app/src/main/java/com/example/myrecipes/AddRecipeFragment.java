@@ -18,7 +18,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +33,6 @@ import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.UserModel;
 
 import java.io.InputStream;
-import java.util.List;
 
 public class AddRecipeFragment extends Fragment {
 
@@ -93,24 +91,26 @@ public class AddRecipeFragment extends Fragment {
             String ingredients = binding.ingredientsEt.getText().toString();
             String userId = UserModel.instance().getUserProfileDetails().getId();
 
-            Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+            if (isRecipeFormValid(name, category,instructions, ingredients)) {
+                Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
 
-            if (isAvatarSelected){
-                binding.recipeImg.setDrawingCacheEnabled(true);
-                binding.recipeImg.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
-                RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url->{
-                    if (url != null){
-                        rcp.setImgUrl(url);
-                    }
+                if (isAvatarSelected) {
+                    binding.recipeImg.setDrawingCacheEnabled(true);
+                    binding.recipeImg.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
+                    RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
+                        if (url != null) {
+                            rcp.setImgUrl(url);
+                        }
+                        RecipeModel.instance().addRecipe(rcp, (unused) -> {
+                            Navigation.findNavController(view1).popBackStack();
+                        });
+                    });
+                } else {
                     RecipeModel.instance().addRecipe(rcp, (unused) -> {
                         Navigation.findNavController(view1).popBackStack();
                     });
-                });
-            }else {
-                RecipeModel.instance().addRecipe(rcp, (unused) -> {
-                    Navigation.findNavController(view1).popBackStack();
-                });
+                }
             }
         });
 
@@ -140,5 +140,29 @@ public class AddRecipeFragment extends Fragment {
 
         });
         return view;
+    }
+
+    private boolean isRecipeFormValid(String name, String  category, String instructions, String ingredients) {
+        boolean valid = true;
+
+        if (name.isEmpty()) {
+            binding.nameEt.setError("recipe name is required");
+            binding.nameEt.requestFocus();
+            valid = false;
+        }
+        if (category.isEmpty()) {
+            binding.categoryEt.setError("recipe category is required");
+            binding.categoryEt.requestFocus();
+        }
+        if (instructions.isEmpty()) {
+            binding.instructionsEt.setError("recipe instructions is required");
+            binding.instructionsEt.requestFocus();
+        }
+        if (ingredients.isEmpty()) {
+            binding.ingredientsEt.setError("recipe ingredients is required");
+            binding.ingredientsEt.requestFocus();
+        }
+
+        return valid;
     }
 }
