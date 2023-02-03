@@ -1,6 +1,7 @@
 package com.example.myrecipes;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +28,13 @@ import android.view.ViewGroup;
 
 import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
+import com.example.myrecipes.model.recipe.RecipeApiModel;
+import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
 import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.UserModel;
+
+import java.io.InputStream;
+import java.util.List;
 
 public class AddRecipeFragment extends Fragment {
 
@@ -114,6 +122,22 @@ public class AddRecipeFragment extends Fragment {
 
         binding.galleryButton.setOnClickListener(view1->{
             galleryLauncher.launch("image/*");
+        });
+
+        binding.generateRcpBtn.setOnClickListener(view1 -> {
+            LiveData<RecipeApiReturnObj> data = RecipeApiModel.instance().getRandomRecipe();
+            data.observe(getViewLifecycleOwner(),recipe->{
+                binding.nameEt.setText(recipe.getName());
+                binding.categoryEt.setText(recipe.getCategory());
+                binding.instructionsEt.setText(recipe.getInstructions());
+                binding.ingredientsEt.setText(recipe.getIngredients());
+                LiveData<InputStream> imgData = RecipeApiModel.instance().getImg(recipe.getImagePath());
+                imgData.observe(getViewLifecycleOwner(),imgStream->{
+                    isAvatarSelected = true;
+                    binding.recipeImg.setImageBitmap(BitmapFactory.decodeStream(imgStream));
+                });
+            });
+
         });
         return view;
     }
