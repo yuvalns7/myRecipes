@@ -1,5 +1,6 @@
 package com.example.myrecipes;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
@@ -40,10 +42,13 @@ public class AddRecipeFragment extends Fragment {
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     Boolean isAvatarSelected = false;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        progressDialog = new ProgressDialog(getActivity());
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
@@ -93,6 +98,10 @@ public class AddRecipeFragment extends Fragment {
 
             if (isRecipeFormValid(name, category,instructions, ingredients)) {
                 Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+                progressDialog.setMessage("Please wait while your recipe is being added...");
+                progressDialog.setTitle("Adding Recipe");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
 
                 if (isAvatarSelected) {
                     binding.recipeImg.setDrawingCacheEnabled(true);
@@ -102,14 +111,11 @@ public class AddRecipeFragment extends Fragment {
                         if (url != null) {
                             rcp.setImgUrl(url);
                         }
-                        RecipeModel.instance().addRecipe(rcp, (unused) -> {
-                            Navigation.findNavController(view1).popBackStack();
-                        });
+
+                        addRecipe(view1, rcp);
                     });
                 } else {
-                    RecipeModel.instance().addRecipe(rcp, (unused) -> {
-                        Navigation.findNavController(view1).popBackStack();
-                    });
+                    addRecipe(view1, rcp);
                 }
             }
         });
@@ -164,5 +170,13 @@ public class AddRecipeFragment extends Fragment {
         }
 
         return valid;
+    }
+
+    private void addRecipe(View view, Recipe rcp) {
+        RecipeModel.instance().addRecipe(rcp, (unused) -> {
+            Navigation.findNavController(view).popBackStack();
+            progressDialog.dismiss();
+            Toast.makeText(getActivity(), "Recipe added successfully", Toast.LENGTH_SHORT).show();
+        });
     }
 }
