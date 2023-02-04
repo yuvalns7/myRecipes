@@ -80,12 +80,14 @@ public class RecipeModel {
     }
 
     private Integer userRecipeCount = -1;
-    public Integer getUserRecipeCount(Listener<Integer> callback) {
+    public Integer getUserRecipeCount() {
         if(userRecipeCount == -1){
-           firebaseModel.getUserRecipeCount(data -> {
-               userRecipeCount = data;
-               callback.onComplete(data);
-           });
+            userRecipeCount = localDb.recipeDao().countRecipeByUser(firebaseModel.getUserId());
+//            callback.onComplete(userRecipeCount);
+//           firebaseModel.getUserRecipeCount(data -> {
+//               userRecipeCount = data;
+//               callback.onComplete(data);
+//           });
         }
         return userRecipeCount;
     }

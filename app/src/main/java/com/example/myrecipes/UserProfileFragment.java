@@ -28,6 +28,9 @@ import com.example.myrecipes.model.user.UserModel;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class UserProfileFragment extends Fragment {
 
     FragmentUserProfileBinding binding;
@@ -70,9 +73,22 @@ public class UserProfileFragment extends Fragment {
         if (user!= null) {
             binding.fullName.setText(user.getName());
             binding.fullNameProfile.getEditText().setText(user.getName());
-            RecipeModel.instance().getUserRecipeCount(data -> {
-                binding.recipeCount.setText(data.toString());
+
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Perform database operation here
+                    Integer recipeCount = RecipeModel.instance().getUserRecipeCount();
+                    binding.recipeCount.setText(recipeCount.toString());
+                }
             });
+
+//            Integer recipeCount = RecipeModel.instance().getUserRecipeCount();
+//            binding.recipeCount.setText(recipeCount.toString());
+//            RecipeModel.instance().getUserRecipeCount(data -> {
+//                binding.recipeCount.setText(data.toString());
+//            });
 
             if (user.getAvatarUrl() != null && user.getAvatarUrl().length() > 5) {
                 Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.avatar).into(binding.profileImage);
