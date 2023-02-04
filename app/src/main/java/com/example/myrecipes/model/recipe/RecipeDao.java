@@ -17,7 +17,10 @@ public interface RecipeDao {
     @Query("SELECT COUNT(*) FROM Recipe Where userId = :userId")
     Integer countRecipeByUser(String userId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM Recipe Where name = :name")
+    Recipe findByName(String name);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Recipe... recipes);
 
     @Delete
