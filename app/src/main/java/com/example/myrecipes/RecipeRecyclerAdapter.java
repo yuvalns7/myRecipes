@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.util.StringUtil;
 
+import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
+import com.example.myrecipes.databinding.FragmentRecipesListBinding;
+import com.example.myrecipes.databinding.RecipeRowBinding;
 import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.utils.StringUtils;
 import com.squareup.picasso.Picasso;
@@ -17,16 +20,18 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 class RecipeViewHolder extends RecyclerView.ViewHolder{
-    TextView nameTv;
-    TextView categoryTv;
+
+    RecipeRowBinding binding;
     List<Recipe> data;
     ImageView avatarImage;
-    public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener, List<Recipe> data) {
-        super(itemView);
+    public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener,
+                            List<Recipe> data,RecipeRowBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
         this.data = data;
-        nameTv = itemView.findViewById(R.id.recipeRow_name_tv);
-        categoryTv = itemView.findViewById(R.id.recipeRow_category_tv);
-        avatarImage = itemView.findViewById(R.id.recipeRow_avatar_img);
+//        nameTv = itemView.findViewById(R.id.recipeRow_name_tv);
+//        categoryTv = itemView.findViewById(R.id.recipeRow_category_tv);
+//        avatarImage = itemView.findViewById(R.id.recipeRow_avatar_img);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,12 +43,13 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void bind(Recipe recipe, int pos) {
-        nameTv.setText(recipe.getName());
-        categoryTv.setText(recipe.getCategory());
+        binding.recipeRowNameTv.setText(recipe.getName());
+        binding.recipeRowCategoryTv.setText(recipe.getCategory());
+        binding.recipeRowUserTv.setText(recipe.getUsername());
         if (StringUtils.isBlank(recipe.getImgUrl())) {
-            Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.avatar).into(avatarImage);
+            Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.avatar).into(binding.recipeRowAvatarImg);
         }else{
-            avatarImage.setImageResource(R.drawable.avatar);
+            binding.recipeRowAvatarImg.setImageResource(R.drawable.avatar);
         }
     }
 }
@@ -72,8 +78,12 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecipeRowBinding binding = RecipeRowBinding.inflate(
+                LayoutInflater.from(parent.getContext()),
+                parent,
+                false);
         View view = inflater.inflate(R.layout.recipe_row,parent,false);
-        return new RecipeViewHolder(view,listener, data);
+        return new RecipeViewHolder(view,listener, data, binding);
     }
 
     @Override

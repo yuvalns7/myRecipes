@@ -32,6 +32,7 @@ import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.model.recipe.RecipeApiModel;
 import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
 import com.example.myrecipes.model.recipe.RecipeModel;
+import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
 
 import java.io.InputStream;
@@ -94,10 +95,14 @@ public class AddRecipeFragment extends Fragment {
             String category = binding.categoryEt.getText().toString();
             String instructions = binding.instructionsEt.getText().toString();
             String ingredients = binding.ingredientsEt.getText().toString();
-            String userId = UserModel.instance().getUserId();
+
+            User user = UserModel.instance().getUserProfileDetails();
+            String username = user.getName();
+            String userId = user.getId();
+
 
             if (isRecipeFormValid(name, category,instructions, ingredients)) {
-                Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+                Recipe rcp = new Recipe(name, category, instructions, ingredients, userId, username);
                 progressDialog.setMessage("Please wait while your recipe is being added...");
                 progressDialog.setTitle("Adding Recipe");
                 progressDialog.setCanceledOnTouchOutside(false);
