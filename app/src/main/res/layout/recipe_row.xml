@@ -17,25 +17,35 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/avatar" />
 
-        <TextView
-            android:id="@+id/recipeRow_name_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="TextView"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/recipeRow_category_tv"
-            app:layout_constraintStart_toEndOf="@+id/recipeRow_avatar_img"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/recipeRow_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/recipeRow_category_tv"
+        app:layout_constraintStart_toEndOf="@+id/recipeRow_avatar_img"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/recipeRow_category_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="TextView"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/recipeRow_avatar_img"
-            app:layout_constraintTop_toBottomOf="@+id/recipeRow_name_tv" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/recipeRow_category_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/recipeRow_user_tv"
+        app:layout_constraintStart_toEndOf="@+id/recipeRow_avatar_img"
+        app:layout_constraintTop_toBottomOf="@+id/recipeRow_name_tv" />
+
+    <TextView
+        android:id="@+id/recipeRow_user_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/recipeRow_avatar_img"
+        app:layout_constraintTop_toBottomOf="@+id/recipeRow_category_tv" />
+</androidx.constraintlayout.widget.ConstraintLayout>
