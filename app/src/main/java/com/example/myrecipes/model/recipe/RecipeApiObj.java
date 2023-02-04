@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import androidx.navigation.Navigation;
 
+import com.example.myrecipes.utils.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -133,34 +135,26 @@ public class RecipeApiObj {
     }
 
     private String getIngredients() {
-        String ingredients = !isBlank(strIngredient1) ? ""  : (" ," +strIngredient1 + " - " + strMeasure1);
-        ingredients += !isBlank(strIngredient2) ? ""  : (" ," +strIngredient2 + " - " + strMeasure2);
-        ingredients += !isBlank(strIngredient3) ? ""  : (" ," +strIngredient3 + " - " + strMeasure3);
-        ingredients += !isBlank(strIngredient4) ? ""  : (" ," +strIngredient4 + " - " + strMeasure4);
-        ingredients += !isBlank(strIngredient5) ? ""  : (" ," +strIngredient5 + " - " + strMeasure5);
-        ingredients += !isBlank(strIngredient6) ? ""  : (" ," +strIngredient6 + " - " + strMeasure6);
-        ingredients += !isBlank(strIngredient7) ? ""  : (" ," +strIngredient7 + " - " + strMeasure7);
-        ingredients += !isBlank(strIngredient8) ? ""  : (" ," +strIngredient8 + " - " + strMeasure8);
-        ingredients += !isBlank(strIngredient9) ? ""  : (" ," +strIngredient9 + " - " + strMeasure9);
-        ingredients += !isBlank(strIngredient10) ? ""  : (" ," +strIngredient10 + " - " + strMeasure10);
-        ingredients += !isBlank(strIngredient11) ? ""  : (" ," +strIngredient11 + " - " + strMeasure11);
-        ingredients += !isBlank(strIngredient12) ? ""  : (" ," +strIngredient12 + " - " + strMeasure12);
-        ingredients += !isBlank(strIngredient13) ? ""  : (" ," +strIngredient13 + " - " + strMeasure13);
-        ingredients += !isBlank(strIngredient14) ? ""  : (" ," +strIngredient14 + " - " + strMeasure14);
-        ingredients += !isBlank(strIngredient15) ? ""  : (" ," +strIngredient15 + " - " + strMeasure15);
-        ingredients += !isBlank(strIngredient16) ? ""  : (" ," +strIngredient16 + " - " + strMeasure16);
-        ingredients += !isBlank(strIngredient17) ? ""  : (" ," +strIngredient17 + " - " + strMeasure17);
-        ingredients += !isBlank(strIngredient18) ? ""  : (" ," +strIngredient18 + " - " + strMeasure18);
-        ingredients += !isBlank(strIngredient19) ? ""  : (" ," +strIngredient19 + " - " + strMeasure19);
-        ingredients += !isBlank(strIngredient20) ? ""  : (" ," +strIngredient20 + " - " + strMeasure20);
+        String ingredients = !StringUtils.isBlank(strIngredient1) ? ""  : (" ," +strIngredient1 + " - " + strMeasure1);
+        ingredients += !StringUtils.isBlank(strIngredient2) ? ""  : (" ," +strIngredient2 + " - " + strMeasure2);
+        ingredients += !StringUtils.isBlank(strIngredient3) ? ""  : (" ," +strIngredient3 + " - " + strMeasure3);
+        ingredients += !StringUtils.isBlank(strIngredient4) ? ""  : (" ," +strIngredient4 + " - " + strMeasure4);
+        ingredients += !StringUtils.isBlank(strIngredient5) ? ""  : (" ," +strIngredient5 + " - " + strMeasure5);
+        ingredients += !StringUtils.isBlank(strIngredient6) ? ""  : (" ," +strIngredient6 + " - " + strMeasure6);
+        ingredients += !StringUtils.isBlank(strIngredient7) ? ""  : (" ," +strIngredient7 + " - " + strMeasure7);
+        ingredients += !StringUtils.isBlank(strIngredient8) ? ""  : (" ," +strIngredient8 + " - " + strMeasure8);
+        ingredients += !StringUtils.isBlank(strIngredient9) ? ""  : (" ," +strIngredient9 + " - " + strMeasure9);
+        ingredients += !StringUtils.isBlank(strIngredient10) ? ""  : (" ," +strIngredient10 + " - " + strMeasure10);
+        ingredients += !StringUtils.isBlank(strIngredient11) ? ""  : (" ," +strIngredient11 + " - " + strMeasure11);
+        ingredients += !StringUtils.isBlank(strIngredient12) ? ""  : (" ," +strIngredient12 + " - " + strMeasure12);
+        ingredients += !StringUtils.isBlank(strIngredient13) ? ""  : (" ," +strIngredient13 + " - " + strMeasure13);
+        ingredients += !StringUtils.isBlank(strIngredient14) ? ""  : (" ," +strIngredient14 + " - " + strMeasure14);
+        ingredients += !StringUtils.isBlank(strIngredient15) ? ""  : (" ," +strIngredient15 + " - " + strMeasure15);
+        ingredients += !StringUtils.isBlank(strIngredient16) ? ""  : (" ," +strIngredient16 + " - " + strMeasure16);
+        ingredients += !StringUtils.isBlank(strIngredient17) ? ""  : (" ," +strIngredient17 + " - " + strMeasure17);
+        ingredients += !StringUtils.isBlank(strIngredient18) ? ""  : (" ," +strIngredient18 + " - " + strMeasure18);
+        ingredients += !StringUtils.isBlank(strIngredient19) ? ""  : (" ," +strIngredient19 + " - " + strMeasure19);
+        ingredients += !StringUtils.isBlank(strIngredient20) ? ""  : (" ," +strIngredient20 + " - " + strMeasure20);
         return ingredients;
     }
-
-    private boolean isBlank(String str) {
-        if (str != null && !str.isEmpty() && !str.trim().isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
 }
