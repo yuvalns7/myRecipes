@@ -38,7 +38,7 @@ public class RecipeFragment extends Fragment {
         binding.recipeName.setText(recipe.getName());
         binding.recipeCategory.setText(recipe.getCategory());
         binding.recipeInstructions.setText(recipe.getInstructions());
-        binding.recipeInstructions.setText(recipe.getIngredients());
+        binding.recipeIngredients.setText(recipe.getIngredients());
         binding.recipeUserName.setText(recipe.getUsername());
 
         return view;
