@@ -84,12 +84,6 @@ public class UserProfileFragment extends Fragment {
                 }
             });
 
-//            Integer recipeCount = RecipeModel.instance().getUserRecipeCount();
-//            binding.recipeCount.setText(recipeCount.toString());
-//            RecipeModel.instance().getUserRecipeCount(data -> {
-//                binding.recipeCount.setText(data.toString());
-//            });
-
             if (user.getAvatarUrl() != null && user.getAvatarUrl().length() > 5) {
                 Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.avatar).into(binding.profileImage);
             }else{

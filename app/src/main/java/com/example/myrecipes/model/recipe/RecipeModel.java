@@ -63,6 +63,7 @@ public class RecipeModel {
                 }
                 // update local last update
                 Recipe.setLocalLastUpdate(time);
+                setRecipeCount();
                 EventListLoadingState.postValue(LoadingState.NOT_LOADING);
             });
         });
@@ -82,16 +83,14 @@ public class RecipeModel {
     private Integer userRecipeCount = -1;
     public Integer getUserRecipeCount() {
         if(userRecipeCount == -1){
-            userRecipeCount = localDb.recipeDao().countRecipeByUser(firebaseModel.getUserId());
-//            callback.onComplete(userRecipeCount);
-//           firebaseModel.getUserRecipeCount(data -> {
-//               userRecipeCount = data;
-//               callback.onComplete(data);
-//           });
+            setRecipeCount();
         }
         return userRecipeCount;
     }
 
+    private void setRecipeCount() {
+        userRecipeCount = localDb.recipeDao().countRecipeByUser(firebaseModel.getUserId());
+    }
     public void resetDataOnLogout() {
         userRecipeCount = -1;
     }
