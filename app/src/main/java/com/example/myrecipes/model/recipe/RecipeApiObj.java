@@ -122,18 +122,6 @@ public class RecipeApiObj {
         return rcp;
     }
 
-    public Bitmap urlToBitmap(String link) {
-        Bitmap image = null;
-        try {
-            URL url = new URL(link);
-            image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch(Exception e) {
-            System.out.println(e);
-        } finally {
-            return image;
-        }
-    }
-
     private String getIngredients() {
         String ingredients = !StringUtils.isBlank(strIngredient1) ? ""  : (strIngredient1 + " - " + strMeasure1);
         ingredients += !StringUtils.isBlank(strIngredient2) ? ""  : (", " +strIngredient2 + " - " + strMeasure2);
