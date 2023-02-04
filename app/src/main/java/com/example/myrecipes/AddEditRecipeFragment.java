@@ -35,6 +35,7 @@ import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
 import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.concurrent.Executor;
@@ -92,6 +93,10 @@ public class AddEditRecipeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAddEditRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
+
+        // TODO REPLACE RecipeFragmentArgs
+//        Recipe recipeParam = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
+//        setEditRecipeData(recipeParam);
 
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
@@ -221,5 +226,18 @@ public class AddEditRecipeFragment extends Fragment {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+    }
+
+    private void setEditRecipeData(Recipe rcp) {
+        binding.nameEt.setText(rcp.getName());
+        binding.categoryEt.setText(rcp.getCategory());
+        binding.instructionsEt.setText(rcp.getInstructions());
+        binding.ingredientsEt.setText(rcp.getIngredients());
+
+        if (rcp.getImgUrl() != null && rcp.getImgUrl().length() > 5) {
+            Picasso.get().load(rcp.getImgUrl()).placeholder(R.drawable.chef_avatar).into(binding.recipeImg);
+        }else{
+            binding.recipeImg.setImageResource(R.drawable.chef_avatar);
+        }
     }
 }
