@@ -4,14 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.util.StringUtil;
 
-import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
-import com.example.myrecipes.databinding.FragmentRecipesListBinding;
 import com.example.myrecipes.databinding.RecipeRowBinding;
 import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.utils.StringUtils;

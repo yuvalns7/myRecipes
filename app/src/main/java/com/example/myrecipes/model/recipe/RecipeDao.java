@@ -20,7 +20,10 @@ public interface RecipeDao {
     @Query("SELECT * FROM Recipe Where userId = :userId")
     LiveData<List<Recipe>> getAllRecipesByUser(String userId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM Recipe Where name = :name")
+    Recipe findByName(String name);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertAll(Recipe... recipes);
 
     @Delete

@@ -15,10 +15,10 @@
             app:destination="@id/userRecipesListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addRecipeFragment"
-        android:name="com.example.myrecipes.AddRecipeFragment"
+        android:id="@+id/addEditRecipeFragment"
+        android:name="com.example.myrecipes.AddEditRecipeFragment"
         android:label="add recipe"
-        tools:layout="@layout/fragment_add_recipe">
+        tools:layout="@layout/fragment_add_edit_recipe">
     </fragment>
     <fragment
         android:id="@+id/recipesListFragment"

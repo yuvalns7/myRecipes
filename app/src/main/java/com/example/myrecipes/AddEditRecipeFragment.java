@@ -12,11 +12,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -25,21 +28,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
+import com.example.myrecipes.databinding.FragmentAddEditRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.model.recipe.RecipeApiModel;
 import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
 import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-public class AddRecipeFragment extends Fragment {
+public class AddEditRecipeFragment extends Fragment {
 
-    FragmentAddRecipeBinding binding;
+    FragmentAddEditRecipeBinding binding;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     Boolean isAvatarSelected = false;
@@ -49,12 +56,18 @@ public class AddRecipeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO REPLACE RecipeFragmentArgs
+//        Recipe recipeParam = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
+//        if (recipeParam != null) {
+//            setEditRecipeData(recipeParam);
+//        }
+
         progressDialog = new ProgressDialog(getActivity());
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.addRecipeFragment);
+                menu.removeItem(R.id.addEditRecipeFragment);
             }
 
             @Override
@@ -87,7 +100,7 @@ public class AddRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
+        binding = FragmentAddEditRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
         binding.saveBtn.setOnClickListener(view1 -> {
@@ -108,20 +121,42 @@ public class AddRecipeFragment extends Fragment {
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
-                if (isAvatarSelected) {
-                    binding.recipeImg.setDrawingCacheEnabled(true);
-                    binding.recipeImg.buildDrawingCache();
-                    Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
-                    RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
-                        if (url != null) {
-                            rcp.setImgUrl(url);
-                        }
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isAvatarSelected) {
+                            binding.recipeImg.setDrawingCacheEnabled(true);
+                            binding.recipeImg.buildDrawingCache();
+                            Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
 
-                        addRecipe(view1, rcp);
-                    });
-                } else {
-                    addRecipe(view1, rcp);
-                }
+                            if(RecipeModel.instance().isRecipeNameExists(rcp.getName())) {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressDialog.dismiss();
+                                        binding.nameEt.setError("recipe name already exists");
+                                        binding.nameEt.requestFocus();
+                                        openErrorToast(view, "Recipe with the same name already exist");
+                                    }
+                                });
+                                return;
+                            }
+                            RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
+                                if (url != null) {
+                                    rcp.setImgUrl(url);
+                                }
+
+                                addRecipe(view1, rcp);
+                            });
+                        } else {
+                            addRecipe(view1, rcp);
+                        }
+                    }
+                });
+
+
             }
         });
 
@@ -183,5 +218,40 @@ public class AddRecipeFragment extends Fragment {
             progressDialog.dismiss();
             Toast.makeText(getActivity(), "Recipe added successfully", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void openErrorToast(View view, String error) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) view.findViewById(R.id.toast_layout_root));
+
+        TextView text = layout.findViewById(R.id.text);
+        text.setText(error);
+
+        Toast toast = new Toast(getActivity().getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    private void setEditRecipeData(Recipe rcp) {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.navhost);
+        NavDestination currentDestination = navController.getCurrentDestination();
+        if (currentDestination.getId() == R.id.addEditRecipeFragment) {
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Edit recipe");
+        }
+        
+        binding.nameEt.setText(rcp.getName());
+        binding.categoryEt.setText(rcp.getCategory());
+        binding.instructionsEt.setText(rcp.getInstructions());
+        binding.ingredientsEt.setText(rcp.getIngredients());
+
+        if (rcp.getImgUrl() != null && rcp.getImgUrl().length() > 5) {
+            Picasso.get().load(rcp.getImgUrl()).placeholder(R.drawable.chef_avatar).into(binding.recipeImg);
+        }else{
+            binding.recipeImg.setImageResource(R.drawable.chef_avatar);
+        }
+
+        binding.saveBtn.setText("update");
+        getActivity().setTitle("edit recipe");
     }
 }

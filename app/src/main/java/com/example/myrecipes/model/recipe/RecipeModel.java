@@ -99,7 +99,13 @@ public class RecipeModel {
     private void setRecipeCount() {
         userRecipeCount = localDb.recipeDao().countRecipeByUser(firebaseModel.getUserId());
     }
+
     public void resetDataOnLogout() {
         userRecipeCount = -1;
+    }
+
+    public boolean isRecipeNameExists(String recipeName) {
+        Recipe recipe = localDb.recipeDao().findByName(recipeName);
+        return recipe != null;
     }
 }
