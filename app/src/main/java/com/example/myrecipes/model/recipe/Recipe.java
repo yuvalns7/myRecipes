@@ -50,12 +50,12 @@ public class Recipe {
         this.userId = userId;
     }
 
-    static final String USER_ID = "userId";
-    static final String NAME = "name";
-    static final String CATEGORY = "category";
-    static final String INSTRUCTIONS = "instructions";
-    static final String IMG_URL = "imgUrl";
-    static final String INGREDIENTS = "ingredients";
+    public static final String USER_ID = "userId";
+    public static final String NAME = "name";
+    public static final String CATEGORY = "category";
+    public static final String INSTRUCTIONS = "instructions";
+    public static final String IMG_URL = "imgUrl";
+    public static final String INGREDIENTS = "ingredients";
 
 
     public static final String COLLECTION = "recipes";

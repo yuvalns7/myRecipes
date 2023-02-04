@@ -1,6 +1,8 @@
 package com.example.myrecipes;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -22,11 +25,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
+import com.example.myrecipes.model.recipe.RecipeApiModel;
+import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
 import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.UserModel;
+
+import java.io.InputStream;
 
 public class AddRecipeFragment extends Fragment {
 
@@ -34,10 +42,13 @@ public class AddRecipeFragment extends Fragment {
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     Boolean isAvatarSelected = false;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        progressDialog = new ProgressDialog(getActivity());
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
@@ -83,26 +94,29 @@ public class AddRecipeFragment extends Fragment {
             String category = binding.categoryEt.getText().toString();
             String instructions = binding.instructionsEt.getText().toString();
             String ingredients = binding.ingredientsEt.getText().toString();
-            String userId = UserModel.instance().getUserProfileDetails().getId();
+            String userId = UserModel.instance().getUserId();
 
-            Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+            if (isRecipeFormValid(name, category,instructions, ingredients)) {
+                Recipe rcp = new Recipe(name, category, instructions, ingredients, userId);
+                progressDialog.setMessage("Please wait while your recipe is being added...");
+                progressDialog.setTitle("Adding Recipe");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
 
-            if (isAvatarSelected){
-                binding.recipeImg.setDrawingCacheEnabled(true);
-                binding.recipeImg.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
-                RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url->{
-                    if (url != null){
-                        rcp.setImgUrl(url);
-                    }
-                    RecipeModel.instance().addRecipe(rcp, (unused) -> {
-                        Navigation.findNavController(view1).popBackStack();
+                if (isAvatarSelected) {
+                    binding.recipeImg.setDrawingCacheEnabled(true);
+                    binding.recipeImg.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
+                    RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
+                        if (url != null) {
+                            rcp.setImgUrl(url);
+                        }
+
+                        addRecipe(view1, rcp);
                     });
-                });
-            }else {
-                RecipeModel.instance().addRecipe(rcp, (unused) -> {
-                    Navigation.findNavController(view1).popBackStack();
-                });
+                } else {
+                    addRecipe(view1, rcp);
+                }
             }
         });
 
@@ -115,6 +129,54 @@ public class AddRecipeFragment extends Fragment {
         binding.galleryButton.setOnClickListener(view1->{
             galleryLauncher.launch("image/*");
         });
+
+        binding.generateRcpBtn.setOnClickListener(view1 -> {
+            LiveData<RecipeApiReturnObj> data = RecipeApiModel.instance().getRandomRecipe();
+            data.observe(getViewLifecycleOwner(),recipe->{
+                binding.nameEt.setText(recipe.getName());
+                binding.categoryEt.setText(recipe.getCategory());
+                binding.instructionsEt.setText(recipe.getInstructions());
+                binding.ingredientsEt.setText(recipe.getIngredients());
+                LiveData<InputStream> imgData = RecipeApiModel.instance().getImg(recipe.getImagePath());
+                imgData.observe(getViewLifecycleOwner(),imgStream->{
+                    isAvatarSelected = true;
+                    binding.recipeImg.setImageBitmap(BitmapFactory.decodeStream(imgStream));
+                });
+            });
+
+        });
         return view;
+    }
+
+    private boolean isRecipeFormValid(String name, String  category, String instructions, String ingredients) {
+        boolean valid = true;
+
+        if (name.isEmpty()) {
+            binding.nameEt.setError("recipe name is required");
+            binding.nameEt.requestFocus();
+            valid = false;
+        }
+        if (category.isEmpty()) {
+            binding.categoryEt.setError("recipe category is required");
+            binding.categoryEt.requestFocus();
+        }
+        if (instructions.isEmpty()) {
+            binding.instructionsEt.setError("recipe instructions is required");
+            binding.instructionsEt.requestFocus();
+        }
+        if (ingredients.isEmpty()) {
+            binding.ingredientsEt.setError("recipe ingredients is required");
+            binding.ingredientsEt.requestFocus();
+        }
+
+        return valid;
+    }
+
+    private void addRecipe(View view, Recipe rcp) {
+        RecipeModel.instance().addRecipe(rcp, (unused) -> {
+            Navigation.findNavController(view).popBackStack();
+            progressDialog.dismiss();
+            Toast.makeText(getActivity(), "Recipe added successfully", Toast.LENGTH_SHORT).show();
+        });
     }
 }

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myrecipes.databinding.FragmentUserProfileBinding;
+import com.example.myrecipes.model.recipe.RecipeModel;
 import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
 import com.google.android.material.textfield.TextInputLayout;
@@ -69,6 +70,9 @@ public class UserProfileFragment extends Fragment {
         if (user!= null) {
             binding.fullName.setText(user.getName());
             binding.fullNameProfile.getEditText().setText(user.getName());
+            RecipeModel.instance().getUserRecipeCount(data -> {
+                binding.recipeCount.setText(data.toString());
+            });
 
             if (user.getAvatarUrl() != null && user.getAvatarUrl().length() > 5) {
                 Picasso.get().load(user.getAvatarUrl()).placeholder(R.drawable.avatar).into(binding.profileImage);

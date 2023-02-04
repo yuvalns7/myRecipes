@@ -14,6 +14,9 @@ public interface RecipeDao {
     @Query("select * from Recipe")
     LiveData<List<Recipe>> getAll();
 
+    @Query("SELECT COUNT(*) FROM Recipe Where userId = :userId")
+    Integer countRecipeByUser(String userId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Recipe... recipes);
 

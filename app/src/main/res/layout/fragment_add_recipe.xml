@@ -48,6 +48,21 @@
                     android:src="@drawable/ic_baseline_photo_camera_24" />
             </FrameLayout>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/generateRcpBtn"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="generate recipe" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -109,6 +124,7 @@
                     android:inputType="textMultiLine"
                     android:hint="Recipe Instructions" />
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myrecipes.model.firebase.FirebaseModel;
 import com.example.myrecipes.model.localDB.AppLocalDb;
 import com.example.myrecipes.model.localDB.AppLocalDbRepository;
+import com.example.myrecipes.model.user.UserModel;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -76,5 +77,20 @@ public class RecipeModel {
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
         firebaseModel.uploadImage(name,bitmap,listener);
+    }
+
+    private Integer userRecipeCount = -1;
+    public Integer getUserRecipeCount(Listener<Integer> callback) {
+        if(userRecipeCount == -1){
+           firebaseModel.getUserRecipeCount(data -> {
+               userRecipeCount = data;
+               callback.onComplete(data);
+           });
+        }
+        return userRecipeCount;
+    }
+
+    public void resetDataOnLogout() {
+        userRecipeCount = -1;
     }
 }

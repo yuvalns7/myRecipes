@@ -1,5 +1,14 @@
 package com.example.myrecipes.model.recipe;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+
+import androidx.navigation.Navigation;
+
+import java.io.IOException;
+import java.net.URL;
+
 public class RecipeApiObj {
 
     String idMeal;
@@ -28,8 +37,28 @@ public class RecipeApiObj {
     String strIngredient18;
     String strIngredient19;
     String strIngredient20;
+    String strMeasure1;
+    String strMeasure2;
+    String strMeasure3;
+    String strMeasure4;
+    String strMeasure5;
+    String strMeasure6;
+    String strMeasure7;
+    String strMeasure8;
+    String strMeasure9;
+    String strMeasure10;
+    String strMeasure11;
+    String strMeasure12;
+    String strMeasure13;
+    String strMeasure14;
+    String strMeasure15;
+    String strMeasure16;
+    String strMeasure17;
+    String strMeasure18;
+    String strMeasure19;
+    String strMeasure20;
 
-    public RecipeApiObj(String idMeal, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strIngredient1, String strIngredient2, String strIngredient3, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient8, String strIngredient9, String strIngredient10, String strIngredient11, String strIngredient12, String strIngredient13, String strIngredient14, String strIngredient15, String strIngredient16, String strIngredient17, String strIngredient18, String strIngredient19, String strIngredient20) {
+    public RecipeApiObj(String idMeal, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strIngredient1, String strIngredient2, String strIngredient3, String strIngredient4, String strIngredient5, String strIngredient6, String strIngredient7, String strIngredient8, String strIngredient9, String strIngredient10, String strIngredient11, String strIngredient12, String strIngredient13, String strIngredient14, String strIngredient15, String strIngredient16, String strIngredient17, String strIngredient18, String strIngredient19, String strIngredient20, String strMeasure1, String strMeasure2, String strMeasure3, String strMeasure4, String strMeasure5, String strMeasure6, String strMeasure7, String strMeasure8, String strMeasure9, String strMeasure10, String strMeasure11, String strMeasure12, String strMeasure13, String strMeasure14, String strMeasure15, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20) {
         this.idMeal = idMeal;
         this.strMeal = strMeal;
         this.strCategory = strCategory;
@@ -56,213 +85,82 @@ public class RecipeApiObj {
         this.strIngredient18 = strIngredient18;
         this.strIngredient19 = strIngredient19;
         this.strIngredient20 = strIngredient20;
+        this.strMeasure1 = strMeasure1;
+        this.strMeasure2 = strMeasure2;
+        this.strMeasure3 = strMeasure3;
+        this.strMeasure4 = strMeasure4;
+        this.strMeasure5 = strMeasure5;
+        this.strMeasure6 = strMeasure6;
+        this.strMeasure7 = strMeasure7;
+        this.strMeasure8 = strMeasure8;
+        this.strMeasure9 = strMeasure9;
+        this.strMeasure10 = strMeasure10;
+        this.strMeasure11 = strMeasure11;
+        this.strMeasure12 = strMeasure12;
+        this.strMeasure13 = strMeasure13;
+        this.strMeasure14 = strMeasure14;
+        this.strMeasure15 = strMeasure15;
+        this.strMeasure16 = strMeasure16;
+        this.strMeasure17 = strMeasure17;
+        this.strMeasure18 = strMeasure18;
+        this.strMeasure19 = strMeasure19;
+        this.strMeasure20 = strMeasure20;
     }
 
-    public String getIdMeal() {
-        return idMeal;
+    public RecipeApiReturnObj toRecipe() {
+        RecipeApiReturnObj rcp = new RecipeApiReturnObj();
+        rcp.setName(this.strMeal);
+        rcp.setCategory(this.strCategory);
+        rcp.setInstructions(this.strInstructions);
+        rcp.setIngredients(getIngredients());
+        String[] parts = this.strMealThumb.split("/");
+        String lastPart = parts[parts.length - 1];
+        rcp.setImagePath(lastPart);
+
+        return rcp;
     }
 
-    public void setIdMeal(String idMeal) {
-        this.idMeal = idMeal;
+    public Bitmap urlToBitmap(String link) {
+        Bitmap image = null;
+        try {
+            URL url = new URL(link);
+            image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch(Exception e) {
+            System.out.println(e);
+        } finally {
+            return image;
+        }
     }
 
-    public String getStrMeal() {
-        return strMeal;
+    private String getIngredients() {
+        String ingredients = !isBlank(strIngredient1) ? ""  : (" ," +strIngredient1 + " - " + strMeasure1);
+        ingredients += !isBlank(strIngredient2) ? ""  : (" ," +strIngredient2 + " - " + strMeasure2);
+        ingredients += !isBlank(strIngredient3) ? ""  : (" ," +strIngredient3 + " - " + strMeasure3);
+        ingredients += !isBlank(strIngredient4) ? ""  : (" ," +strIngredient4 + " - " + strMeasure4);
+        ingredients += !isBlank(strIngredient5) ? ""  : (" ," +strIngredient5 + " - " + strMeasure5);
+        ingredients += !isBlank(strIngredient6) ? ""  : (" ," +strIngredient6 + " - " + strMeasure6);
+        ingredients += !isBlank(strIngredient7) ? ""  : (" ," +strIngredient7 + " - " + strMeasure7);
+        ingredients += !isBlank(strIngredient8) ? ""  : (" ," +strIngredient8 + " - " + strMeasure8);
+        ingredients += !isBlank(strIngredient9) ? ""  : (" ," +strIngredient9 + " - " + strMeasure9);
+        ingredients += !isBlank(strIngredient10) ? ""  : (" ," +strIngredient10 + " - " + strMeasure10);
+        ingredients += !isBlank(strIngredient11) ? ""  : (" ," +strIngredient11 + " - " + strMeasure11);
+        ingredients += !isBlank(strIngredient12) ? ""  : (" ," +strIngredient12 + " - " + strMeasure12);
+        ingredients += !isBlank(strIngredient13) ? ""  : (" ," +strIngredient13 + " - " + strMeasure13);
+        ingredients += !isBlank(strIngredient14) ? ""  : (" ," +strIngredient14 + " - " + strMeasure14);
+        ingredients += !isBlank(strIngredient15) ? ""  : (" ," +strIngredient15 + " - " + strMeasure15);
+        ingredients += !isBlank(strIngredient16) ? ""  : (" ," +strIngredient16 + " - " + strMeasure16);
+        ingredients += !isBlank(strIngredient17) ? ""  : (" ," +strIngredient17 + " - " + strMeasure17);
+        ingredients += !isBlank(strIngredient18) ? ""  : (" ," +strIngredient18 + " - " + strMeasure18);
+        ingredients += !isBlank(strIngredient19) ? ""  : (" ," +strIngredient19 + " - " + strMeasure19);
+        ingredients += !isBlank(strIngredient20) ? ""  : (" ," +strIngredient20 + " - " + strMeasure20);
+        return ingredients;
     }
 
-    public void setStrMeal(String strMeal) {
-        this.strMeal = strMeal;
+    private boolean isBlank(String str) {
+        if (str != null && !str.isEmpty() && !str.trim().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
-    public String getStrCategory() {
-        return strCategory;
-    }
-
-    public void setStrCategory(String strCategory) {
-        this.strCategory = strCategory;
-    }
-
-    public String getStrArea() {
-        return strArea;
-    }
-
-    public void setStrArea(String strArea) {
-        this.strArea = strArea;
-    }
-
-    public String getStrInstructions() {
-        return strInstructions;
-    }
-
-    public void setStrInstructions(String strInstructions) {
-        this.strInstructions = strInstructions;
-    }
-
-    public String getStrMealThumb() {
-        return strMealThumb;
-    }
-
-    public void setStrMealThumb(String strMealThumb) {
-        this.strMealThumb = strMealThumb;
-    }
-
-    public String getStrIngredient1() {
-        return strIngredient1;
-    }
-
-    public void setStrIngredient1(String strIngredient1) {
-        this.strIngredient1 = strIngredient1;
-    }
-
-    public String getStrIngredient2() {
-        return strIngredient2;
-    }
-
-    public void setStrIngredient2(String strIngredient2) {
-        this.strIngredient2 = strIngredient2;
-    }
-
-    public String getStrIngredient3() {
-        return strIngredient3;
-    }
-
-    public void setStrIngredient3(String strIngredient3) {
-        this.strIngredient3 = strIngredient3;
-    }
-
-    public String getStrIngredient4() {
-        return strIngredient4;
-    }
-
-    public void setStrIngredient4(String strIngredient4) {
-        this.strIngredient4 = strIngredient4;
-    }
-
-    public String getStrIngredient5() {
-        return strIngredient5;
-    }
-
-    public void setStrIngredient5(String strIngredient5) {
-        this.strIngredient5 = strIngredient5;
-    }
-
-    public String getStrIngredient6() {
-        return strIngredient6;
-    }
-
-    public void setStrIngredient6(String strIngredient6) {
-        this.strIngredient6 = strIngredient6;
-    }
-
-    public String getStrIngredient7() {
-        return strIngredient7;
-    }
-
-    public void setStrIngredient7(String strIngredient7) {
-        this.strIngredient7 = strIngredient7;
-    }
-
-    public String getStrIngredient8() {
-        return strIngredient8;
-    }
-
-    public void setStrIngredient8(String strIngredient8) {
-        this.strIngredient8 = strIngredient8;
-    }
-
-    public String getStrIngredient9() {
-        return strIngredient9;
-    }
-
-    public void setStrIngredient9(String strIngredient9) {
-        this.strIngredient9 = strIngredient9;
-    }
-
-    public String getStrIngredient10() {
-        return strIngredient10;
-    }
-
-    public void setStrIngredient10(String strIngredient10) {
-        this.strIngredient10 = strIngredient10;
-    }
-
-    public String getStrIngredient11() {
-        return strIngredient11;
-    }
-
-    public void setStrIngredient11(String strIngredient11) {
-        this.strIngredient11 = strIngredient11;
-    }
-
-    public String getStrIngredient12() {
-        return strIngredient12;
-    }
-
-    public void setStrIngredient12(String strIngredient12) {
-        this.strIngredient12 = strIngredient12;
-    }
-
-    public String getStrIngredient13() {
-        return strIngredient13;
-    }
-
-    public void setStrIngredient13(String strIngredient13) {
-        this.strIngredient13 = strIngredient13;
-    }
-
-    public String getStrIngredient14() {
-        return strIngredient14;
-    }
-
-    public void setStrIngredient14(String strIngredient14) {
-        this.strIngredient14 = strIngredient14;
-    }
-
-    public String getStrIngredient15() {
-        return strIngredient15;
-    }
-
-    public void setStrIngredient15(String strIngredient15) {
-        this.strIngredient15 = strIngredient15;
-    }
-
-    public String getStrIngredient16() {
-        return strIngredient16;
-    }
-
-    public void setStrIngredient16(String strIngredient16) {
-        this.strIngredient16 = strIngredient16;
-    }
-
-    public String getStrIngredient17() {
-        return strIngredient17;
-    }
-
-    public void setStrIngredient17(String strIngredient17) {
-        this.strIngredient17 = strIngredient17;
-    }
-
-    public String getStrIngredient18() {
-        return strIngredient18;
-    }
-
-    public void setStrIngredient18(String strIngredient18) {
-        this.strIngredient18 = strIngredient18;
-    }
-
-    public String getStrIngredient19() {
-        return strIngredient19;
-    }
-
-    public void setStrIngredient19(String strIngredient19) {
-        this.strIngredient19 = strIngredient19;
-    }
-
-    public String getStrIngredient20() {
-        return strIngredient20;
-    }
-
-    public void setStrIngredient20(String strIngredient20) {
-        this.strIngredient20 = strIngredient20;
-    }
 }

@@ -8,8 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
+import java.io.InputStream;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +25,10 @@ public class RecipeApiModel {
     Retrofit retrofit;
     RecipeApi recipeApi;
 
+    public static RecipeApiModel instance(){
+        return _instance;
+    }
+
     private RecipeApiModel(){
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -35,15 +40,16 @@ public class RecipeApiModel {
         recipeApi = retrofit.create(RecipeApi.class);
     }
 
-    public LiveData<List<RecipeApiObj>> getRandomRecipe(){
-        MutableLiveData<List<RecipeApiObj>> data = new MutableLiveData<>();
+    public MutableLiveData<RecipeApiReturnObj> getRandomRecipe(){
+        MutableLiveData<RecipeApiReturnObj> data = new MutableLiveData<>();
         Call<RecipeSearchResult> call = recipeApi.getRandomRecipe();
         call.enqueue(new Callback<RecipeSearchResult>() {
             @Override
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
                 if (response.isSuccessful()){
                     RecipeSearchResult res = response.body();
-                    data.setValue(res.getRecipes());
+                    RecipeApiReturnObj recipe = res.getRecipes().get(0).toRecipe();
+                    data.setValue(recipe);
                 }else{
                     Log.d("TAG","----- getRandomRecipe response error");
                 }
@@ -57,5 +63,24 @@ public class RecipeApiModel {
         return data;
     }
 
+    public MutableLiveData<InputStream> getImg(String path) {
+        MutableLiveData<InputStream> data = new MutableLiveData<>();
+        Call<ResponseBody> call = recipeApi.getImage(path);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    ResponseBody res = response.body();
+                    data.setValue(response.body().byteStream());
+                }
 
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("TAG","----- getRandomRecipe fail");
+            }
+        });
+        return data;
+    }
 }
