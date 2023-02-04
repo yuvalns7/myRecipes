@@ -1,5 +1,7 @@
 package com.example.myrecipes;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -30,7 +32,10 @@ public class RecipeFragment extends Fragment {
 
         Recipe recipe = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
 
-        if (recipe.getImgUrl() != null && recipe.getImgUrl().length() > 5) {
+        if (recipe.getPhoto() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(recipe.getPhoto(), 0, recipe.getPhoto().length);
+            binding.recipeImage.setImageBitmap(bitmap);
+        }else if (recipe.getImgUrl() != null && recipe.getImgUrl().length() > 5) {
             Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.chef_avatar).into(binding.recipeImage);
         } else {
             binding.recipeImage.setImageResource(R.drawable.chef_avatar);
@@ -38,7 +43,7 @@ public class RecipeFragment extends Fragment {
         binding.recipeName.setText(recipe.getName());
         binding.recipeCategory.setText(recipe.getCategory());
         binding.recipeInstructions.setText(recipe.getInstructions());
-        binding.recipeInstructions.setText(recipe.getIngredients());
+        binding.recipeIngredients.setText(recipe.getIngredients());
         binding.recipeUserName.setText(recipe.getUsername());
 
         return view;

@@ -1,6 +1,7 @@
 package com.example.myrecipes.model.recipe;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -11,6 +12,9 @@ import com.example.myrecipes.model.localDB.AppLocalDb;
 import com.example.myrecipes.model.localDB.AppLocalDbRepository;
 import com.example.myrecipes.model.user.UserModel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -64,6 +68,9 @@ public class RecipeModel {
                 Long time = localLastUpdate;
                 for(Recipe rcp:list){
                     // insert new records into ROOM
+
+                    rcp.setPhoto(urlToByteArr(rcp.getImgUrl()));
+
                     localDb.recipeDao().insertAll(rcp);
                     if (time < rcp.getLastUpdated()){
                         time = rcp.getLastUpdated();
@@ -107,5 +114,30 @@ public class RecipeModel {
     public boolean isRecipeNameExists(String recipeName) {
         Recipe recipe = localDb.recipeDao().findByName(recipeName);
         return recipe != null;
+    }
+
+    public byte[] urlToByteArr(String link) {
+        byte[] imageBytes = null;
+        try {
+            URL url = new URL(link);
+            InputStream inputStream = url.openStream();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[1024];
+            int length;
+
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            imageBytes = outputStream.toByteArray();
+            inputStream.close();
+            outputStream.close();
+
+        } catch(Exception e) {
+            System.out.println(e);
+        } finally {
+            return imageBytes;
+        }
     }
 }

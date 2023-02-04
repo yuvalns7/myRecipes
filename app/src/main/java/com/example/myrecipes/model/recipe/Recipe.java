@@ -2,8 +2,11 @@ package com.example.myrecipes.model.recipe;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -12,6 +15,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +37,13 @@ public class Recipe implements Serializable {
     private String username = "";
     private Long lastUpdated;
 
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    public byte[] photo;
+
     public Recipe(){
     }
 
     public Recipe(String name, String category, String instructions, String imgUrl, String ingredients, String userId, String username) {
-
         this.name = name;
         this.category = category;
         this.instructions = instructions;
@@ -175,5 +181,13 @@ public class Recipe implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 }

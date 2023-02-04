@@ -122,39 +122,27 @@ public class RecipeApiObj {
         return rcp;
     }
 
-    public Bitmap urlToBitmap(String link) {
-        Bitmap image = null;
-        try {
-            URL url = new URL(link);
-            image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch(Exception e) {
-            System.out.println(e);
-        } finally {
-            return image;
-        }
-    }
-
     private String getIngredients() {
-        String ingredients = !StringUtils.isBlank(strIngredient1) ? ""  : (" ," +strIngredient1 + " - " + strMeasure1);
-        ingredients += !StringUtils.isBlank(strIngredient2) ? ""  : (" ," +strIngredient2 + " - " + strMeasure2);
-        ingredients += !StringUtils.isBlank(strIngredient3) ? ""  : (" ," +strIngredient3 + " - " + strMeasure3);
-        ingredients += !StringUtils.isBlank(strIngredient4) ? ""  : (" ," +strIngredient4 + " - " + strMeasure4);
-        ingredients += !StringUtils.isBlank(strIngredient5) ? ""  : (" ," +strIngredient5 + " - " + strMeasure5);
-        ingredients += !StringUtils.isBlank(strIngredient6) ? ""  : (" ," +strIngredient6 + " - " + strMeasure6);
-        ingredients += !StringUtils.isBlank(strIngredient7) ? ""  : (" ," +strIngredient7 + " - " + strMeasure7);
-        ingredients += !StringUtils.isBlank(strIngredient8) ? ""  : (" ," +strIngredient8 + " - " + strMeasure8);
-        ingredients += !StringUtils.isBlank(strIngredient9) ? ""  : (" ," +strIngredient9 + " - " + strMeasure9);
-        ingredients += !StringUtils.isBlank(strIngredient10) ? ""  : (" ," +strIngredient10 + " - " + strMeasure10);
-        ingredients += !StringUtils.isBlank(strIngredient11) ? ""  : (" ," +strIngredient11 + " - " + strMeasure11);
-        ingredients += !StringUtils.isBlank(strIngredient12) ? ""  : (" ," +strIngredient12 + " - " + strMeasure12);
-        ingredients += !StringUtils.isBlank(strIngredient13) ? ""  : (" ," +strIngredient13 + " - " + strMeasure13);
-        ingredients += !StringUtils.isBlank(strIngredient14) ? ""  : (" ," +strIngredient14 + " - " + strMeasure14);
-        ingredients += !StringUtils.isBlank(strIngredient15) ? ""  : (" ," +strIngredient15 + " - " + strMeasure15);
-        ingredients += !StringUtils.isBlank(strIngredient16) ? ""  : (" ," +strIngredient16 + " - " + strMeasure16);
-        ingredients += !StringUtils.isBlank(strIngredient17) ? ""  : (" ," +strIngredient17 + " - " + strMeasure17);
-        ingredients += !StringUtils.isBlank(strIngredient18) ? ""  : (" ," +strIngredient18 + " - " + strMeasure18);
-        ingredients += !StringUtils.isBlank(strIngredient19) ? ""  : (" ," +strIngredient19 + " - " + strMeasure19);
-        ingredients += !StringUtils.isBlank(strIngredient20) ? ""  : (" ," +strIngredient20 + " - " + strMeasure20);
+        String ingredients = !StringUtils.isBlank(strIngredient1) ? ""  : (strIngredient1 + " - " + strMeasure1);
+        ingredients += !StringUtils.isBlank(strIngredient2) ? ""  : (", " +strIngredient2 + " - " + strMeasure2);
+        ingredients += !StringUtils.isBlank(strIngredient3) ? ""  : (", " +strIngredient3 + " - " + strMeasure3);
+        ingredients += !StringUtils.isBlank(strIngredient4) ? ""  : (", " +strIngredient4 + " - " + strMeasure4);
+        ingredients += !StringUtils.isBlank(strIngredient5) ? ""  : (", " +strIngredient5 + " - " + strMeasure5);
+        ingredients += !StringUtils.isBlank(strIngredient6) ? ""  : (", " +strIngredient6 + " - " + strMeasure6);
+        ingredients += !StringUtils.isBlank(strIngredient7) ? ""  : (", " +strIngredient7 + " - " + strMeasure7);
+        ingredients += !StringUtils.isBlank(strIngredient8) ? ""  : (", " +strIngredient8 + " - " + strMeasure8);
+        ingredients += !StringUtils.isBlank(strIngredient9) ? ""  : (", " +strIngredient9 + " - " + strMeasure9);
+        ingredients += !StringUtils.isBlank(strIngredient10) ? ""  : (", " +strIngredient10 + " - " + strMeasure10);
+        ingredients += !StringUtils.isBlank(strIngredient11) ? ""  : (", " +strIngredient11 + " - " + strMeasure11);
+        ingredients += !StringUtils.isBlank(strIngredient12) ? ""  : (", " +strIngredient12 + " - " + strMeasure12);
+        ingredients += !StringUtils.isBlank(strIngredient13) ? ""  : (", " +strIngredient13 + " - " + strMeasure13);
+        ingredients += !StringUtils.isBlank(strIngredient14) ? ""  : (", " +strIngredient14 + " - " + strMeasure14);
+        ingredients += !StringUtils.isBlank(strIngredient15) ? ""  : (", " +strIngredient15 + " - " + strMeasure15);
+        ingredients += !StringUtils.isBlank(strIngredient16) ? ""  : (", " +strIngredient16 + " - " + strMeasure16);
+        ingredients += !StringUtils.isBlank(strIngredient17) ? ""  : (", " +strIngredient17 + " - " + strMeasure17);
+        ingredients += !StringUtils.isBlank(strIngredient18) ? ""  : (", " +strIngredient18 + " - " + strMeasure18);
+        ingredients += !StringUtils.isBlank(strIngredient19) ? ""  : (", " +strIngredient19 + " - " + strMeasure19);
+        ingredients += !StringUtils.isBlank(strIngredient20) ? ""  : (", " +strIngredient20 + " - " + strMeasure20);
         return ingredients;
     }
 }

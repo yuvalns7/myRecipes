@@ -1,5 +1,7 @@
 package com.example.myrecipes;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,11 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         binding.recipeRowNameTv.setText(recipe.getName());
         binding.recipeRowCategoryTv.setText(recipe.getCategory());
         binding.recipeRowUserTv.setText(recipe.getUsername());
-        if (StringUtils.isBlank(recipe.getImgUrl())) {
+
+        if (recipe.getPhoto() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(recipe.getPhoto(), 0, recipe.getPhoto().length);
+            binding.recipeRowAvatarImg.setImageBitmap(bitmap);
+        }else if (StringUtils.isBlank(recipe.getImgUrl())) {
             Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.chef_avatar).into(binding.recipeRowAvatarImg);
         }else{
             binding.recipeRowAvatarImg.setImageResource(R.drawable.chef_avatar);
