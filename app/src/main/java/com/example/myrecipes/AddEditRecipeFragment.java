@@ -49,6 +49,8 @@ public class AddEditRecipeFragment extends Fragment {
     FragmentAddEditRecipeBinding binding;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
+
+    Recipe recipeParam;
     Boolean isAvatarSelected = false;
     ProgressDialog progressDialog;
 
@@ -56,11 +58,11 @@ public class AddEditRecipeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO REPLACE RecipeFragmentArgs
-//        Recipe recipeParam = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
-//        if (recipeParam != null) {
-//            setEditRecipeData(recipeParam);
-//        }
+        Bundle args = getArguments();
+        if (args!= null) {
+            recipeParam = (Recipe) args.get("recipe");
+            setLabel();
+        }
 
         progressDialog = new ProgressDialog(getActivity());
         FragmentActivity parentActivity = getActivity();
@@ -102,6 +104,10 @@ public class AddEditRecipeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAddEditRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
+
+        if (recipeParam != null) {
+            setEditRecipeData(recipeParam);
+        }
 
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
@@ -233,13 +239,15 @@ public class AddEditRecipeFragment extends Fragment {
         toast.show();
     }
 
-    private void setEditRecipeData(Recipe rcp) {
+    private void setLabel() {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.navhost);
         NavDestination currentDestination = navController.getCurrentDestination();
         if (currentDestination.getId() == R.id.addEditRecipeFragment) {
             ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Edit recipe");
         }
-        
+    }
+
+    private void setEditRecipeData(Recipe rcp) {
         binding.nameEt.setText(rcp.getName());
         binding.categoryEt.setText(rcp.getCategory());
         binding.instructionsEt.setText(rcp.getInstructions());
@@ -253,5 +261,7 @@ public class AddEditRecipeFragment extends Fragment {
 
         binding.saveBtn.setText("update");
         getActivity().setTitle("edit recipe");
+
+        binding.generateRcpBtn.setVisibility(View.GONE);
     }
 }

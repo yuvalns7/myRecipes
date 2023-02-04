@@ -19,6 +19,11 @@
         android:name="com.example.myrecipes.AddEditRecipeFragment"
         android:label="add recipe"
         tools:layout="@layout/fragment_add_edit_recipe">
+        <argument
+            android:name="recipe"
+            app:argType="com.example.myrecipes.model.recipe.Recipe"
+            app:nullable="true"
+            />
     </fragment>
     <fragment
         android:id="@+id/recipesListFragment"
@@ -42,5 +47,9 @@
         android:id="@+id/userRecipesListFragment"
         android:name="com.example.myrecipes.UserRecipesListFragment"
         android:label="fragment_user_recipes_list"
-        tools:layout="@layout/fragment_user_recipes_list" />
+        tools:layout="@layout/fragment_user_recipes_list" >
+        <action
+            android:id="@+id/action_userRecipesListFragment_to_addEditRecipeFragment"
+            app:destination="@id/addEditRecipeFragment" />
+    </fragment>
 </navigation>

@@ -40,7 +40,7 @@ public class UserRecipesListFragment extends Fragment {
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
                 Recipe recipe = viewModel.getData().getValue().get(pos);
-                Navigation.findNavController(view).navigate(RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(recipe));
+                Navigation.findNavController(view).navigate(UserRecipesListFragmentDirections.actionUserRecipesListFragmentToAddEditRecipeFragment(recipe));
             }
         });
 
