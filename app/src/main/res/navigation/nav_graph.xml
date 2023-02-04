@@ -22,5 +22,17 @@
         android:name="com.example.myrecipes.RecipesListFragment"
         android:label="Recipes list"
         tools:layout="@layout/fragment_recipes_list">
+        <action
+            android:id="@+id/action_recipesListFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="com.example.myrecipes.RecipeFragment"
+        android:label="fragment_recipe"
+        tools:layout="@layout/fragment_recipe" >
+        <argument
+            android:name="recipe"
+            app:argType="com.example.myrecipes.model.recipe.Recipe" />
     </fragment>
 </navigation>
