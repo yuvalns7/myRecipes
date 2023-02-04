@@ -19,12 +19,14 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
@@ -36,6 +38,8 @@ import com.example.myrecipes.model.user.User;
 import com.example.myrecipes.model.user.UserModel;
 
 import java.io.InputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AddRecipeFragment extends Fragment {
 
@@ -108,20 +112,42 @@ public class AddRecipeFragment extends Fragment {
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
-                if (isAvatarSelected) {
-                    binding.recipeImg.setDrawingCacheEnabled(true);
-                    binding.recipeImg.buildDrawingCache();
-                    Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
-                    RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
-                        if (url != null) {
-                            rcp.setImgUrl(url);
-                        }
+                Executor executor = Executors.newSingleThreadExecutor();
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isAvatarSelected) {
+                            binding.recipeImg.setDrawingCacheEnabled(true);
+                            binding.recipeImg.buildDrawingCache();
+                            Bitmap bitmap = ((BitmapDrawable) binding.recipeImg.getDrawable()).getBitmap();
 
-                        addRecipe(view1, rcp);
-                    });
-                } else {
-                    addRecipe(view1, rcp);
-                }
+                            if(RecipeModel.instance().isRecipeNameExists(rcp.getName())) {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        progressDialog.dismiss();
+                                        binding.nameEt.setError("recipe name already exists");
+                                        binding.nameEt.requestFocus();
+                                        openErrorToast(view, "Recipe with the same name already exist");
+                                    }
+                                });
+                                return;
+                            }
+                            RecipeModel.instance().uploadImage(rcp.getName(), bitmap, url -> {
+                                if (url != null) {
+                                    rcp.setImgUrl(url);
+                                }
+
+                                addRecipe(view1, rcp);
+                            });
+                        } else {
+                            addRecipe(view1, rcp);
+                        }
+                    }
+                });
+
+
             }
         });
 
@@ -183,5 +209,18 @@ public class AddRecipeFragment extends Fragment {
             progressDialog.dismiss();
             Toast.makeText(getActivity(), "Recipe added successfully", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void openErrorToast(View view, String error) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) view.findViewById(R.id.toast_layout_root));
+
+        TextView text = layout.findViewById(R.id.text);
+        text.setText(error);
+
+        Toast toast = new Toast(getActivity().getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }
