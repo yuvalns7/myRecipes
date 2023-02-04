@@ -11,13 +11,16 @@ import com.example.myrecipes.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Recipe {
+public class Recipe implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @PrimaryKey
     @NonNull
