@@ -27,12 +27,13 @@ public class Recipe {
     private String imgUrl="";
     private String ingredients = "";
     private String userId = "";
+    private String username = "";
     private Long lastUpdated;
 
     public Recipe(){
     }
 
-    public Recipe(String name, String category, String instructions, String imgUrl, String ingredients, String userId) {
+    public Recipe(String name, String category, String instructions, String imgUrl, String ingredients, String userId, String username) {
 
         this.name = name;
         this.category = category;
@@ -40,14 +41,16 @@ public class Recipe {
         this.imgUrl = imgUrl;
         this.ingredients = ingredients;
         this.userId = userId;
+        this.username = username;
     }
 
-    public Recipe(String name, String category, String instructions, String ingredients, String userId) {
+    public Recipe(String name, String category, String instructions, String ingredients, String userId, String username) {
         this.name = name;
         this.category = category;
         this.instructions = instructions;
         this.ingredients = ingredients;
         this.userId = userId;
+        this.username = username;
     }
 
     public static final String USER_ID = "userId";
@@ -56,6 +59,8 @@ public class Recipe {
     public static final String INSTRUCTIONS = "instructions";
     public static final String IMG_URL = "imgUrl";
     public static final String INGREDIENTS = "ingredients";
+
+    public static final String USERNAME = "username";
 
 
     public static final String COLLECTION = "recipes";
@@ -69,8 +74,9 @@ public class Recipe {
         String imgUrl = (String) json.get(IMG_URL);
         String ingredients = (String) json.get(INGREDIENTS);
         String userId = (String) json.get(USER_ID);
+        String username = (String) json.get(USERNAME);
 
-        Recipe rcp = new Recipe(name, category,instructions,imgUrl, ingredients, userId );
+        Recipe rcp = new Recipe(name, category,instructions,imgUrl, ingredients, userId, username);
         try{
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             rcp.setLastUpdated(time.getSeconds());
@@ -99,6 +105,8 @@ public class Recipe {
         json.put(INGREDIENTS, getIngredients());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         json.put(USER_ID, getUserId());
+        json.put(USERNAME, getUsername());
+
         return json;
     }
 
@@ -156,5 +164,13 @@ public class Recipe {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
