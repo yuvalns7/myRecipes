@@ -17,4 +17,10 @@
         android:label="add recipe"
         tools:layout="@layout/fragment_add_recipe">
     </fragment>
+    <fragment
+        android:id="@+id/recipesListFragment"
+        android:name="com.example.myrecipes.RecipesListFragment"
+        android:label="Recipes list"
+        tools:layout="@layout/fragment_recipes_list">
+    </fragment>
 </navigation>

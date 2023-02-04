@@ -10,4 +10,8 @@
         android:id="@+id/addRecipeFragment"
         android:icon="@android:drawable/ic_input_add"
         android:title="Add Recipe" />
+    <item
+        android:id="@+id/recipesListFragment"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home" />
 </menu>
