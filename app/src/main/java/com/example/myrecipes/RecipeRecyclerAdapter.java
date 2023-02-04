@@ -44,9 +44,9 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         binding.recipeRowCategoryTv.setText(recipe.getCategory());
         binding.recipeRowUserTv.setText(recipe.getUsername());
         if (StringUtils.isBlank(recipe.getImgUrl())) {
-            Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.avatar).into(binding.recipeRowAvatarImg);
+            Picasso.get().load(recipe.getImgUrl()).placeholder(R.drawable.chef_avatar).into(binding.recipeRowAvatarImg);
         }else{
-            binding.recipeRowAvatarImg.setImageResource(R.drawable.avatar);
+            binding.recipeRowAvatarImg.setImageResource(R.drawable.chef_avatar);
         }
     }
 }
