@@ -45,6 +45,14 @@ public class RecipeModel {
         return recipesList;
     }
 
+    private LiveData<List<Recipe>> userRecipesList;
+    public LiveData<List<Recipe>> getAllUserRecipes(String userId) {
+        if(userRecipesList == null){
+            userRecipesList = localDb.recipeDao().getAllRecipesByUser(userId);
+        }
+        return userRecipesList;
+    }
+
     public void refreshAllRecipes(){
         EventListLoadingState.setValue(LoadingState.LOADING);
         // get local last update
