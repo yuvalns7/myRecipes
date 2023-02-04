@@ -19,7 +19,6 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.navigation.Navigation;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +28,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
+import com.example.myrecipes.databinding.FragmentAddEditRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
 import com.example.myrecipes.model.recipe.RecipeApiModel;
 import com.example.myrecipes.model.recipe.RecipeApiReturnObj;
@@ -41,9 +40,9 @@ import java.io.InputStream;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class AddRecipeFragment extends Fragment {
+public class AddEditRecipeFragment extends Fragment {
 
-    FragmentAddRecipeBinding binding;
+    FragmentAddEditRecipeBinding binding;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     Boolean isAvatarSelected = false;
@@ -91,7 +90,7 @@ public class AddRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
+        binding = FragmentAddEditRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
         binding.saveBtn.setOnClickListener(view1 -> {

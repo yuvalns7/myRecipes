@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myrecipes.databinding.FragmentAddRecipeBinding;
 import com.example.myrecipes.databinding.FragmentRecipeBinding;
 import com.example.myrecipes.model.recipe.Recipe;
 import com.squareup.picasso.Picasso;
