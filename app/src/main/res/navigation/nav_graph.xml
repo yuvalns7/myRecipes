@@ -10,6 +10,9 @@
         android:name="com.example.myrecipes.UserProfileFragment"
         android:label="my profile"
         tools:layout="@layout/fragment_user_profile">
+        <action
+            android:id="@+id/action_userProfileFragment_to_userRecipesListFragment"
+            app:destination="@id/userRecipesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
@@ -35,4 +38,9 @@
             android:name="recipe"
             app:argType="com.example.myrecipes.model.recipe.Recipe" />
     </fragment>
+    <fragment
+        android:id="@+id/userRecipesListFragment"
+        android:name="com.example.myrecipes.UserRecipesListFragment"
+        android:label="fragment_user_recipes_list"
+        tools:layout="@layout/fragment_user_recipes_list" />
 </navigation>

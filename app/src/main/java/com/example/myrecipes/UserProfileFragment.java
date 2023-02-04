@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,6 +116,9 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        binding.userRecipes.setOnClickListener(view1 -> {
+            Navigation.findNavController(view).navigate(UserProfileFragmentDirections.actionUserProfileFragmentToUserRecipesListFragment());
+        });
 
         binding.cameraButton.setOnClickListener(view1->{
             cameraLauncher.launch(null);
