@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_user_profile">
     </fragment>
     <fragment
-        android:id="@+id/addRecipeFragment"
+        android:id="@+id/addEditRecipeFragment"
         android:name="com.example.myrecipes.AddEditRecipeFragment"
         android:label="add recipe"
         tools:layout="@layout/fragment_add_edit_recipe">

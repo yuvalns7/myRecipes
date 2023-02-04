@@ -12,11 +12,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -53,12 +56,18 @@ public class AddEditRecipeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO REPLACE RecipeFragmentArgs
+//        Recipe recipeParam = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
+//        if (recipeParam != null) {
+//            setEditRecipeData(recipeParam);
+//        }
+
         progressDialog = new ProgressDialog(getActivity());
         FragmentActivity parentActivity = getActivity();
         parentActivity.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.addRecipeFragment);
+                menu.removeItem(R.id.addEditRecipeFragment);
             }
 
             @Override
@@ -93,10 +102,6 @@ public class AddEditRecipeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAddEditRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
-
-        // TODO REPLACE RecipeFragmentArgs
-//        Recipe recipeParam = RecipeFragmentArgs.fromBundle(getArguments()).getRecipe();
-//        setEditRecipeData(recipeParam);
 
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
@@ -229,6 +234,12 @@ public class AddEditRecipeFragment extends Fragment {
     }
 
     private void setEditRecipeData(Recipe rcp) {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.navhost);
+        NavDestination currentDestination = navController.getCurrentDestination();
+        if (currentDestination.getId() == R.id.addEditRecipeFragment) {
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Edit recipe");
+        }
+        
         binding.nameEt.setText(rcp.getName());
         binding.categoryEt.setText(rcp.getCategory());
         binding.instructionsEt.setText(rcp.getInstructions());
@@ -239,5 +250,8 @@ public class AddEditRecipeFragment extends Fragment {
         }else{
             binding.recipeImg.setImageResource(R.drawable.chef_avatar);
         }
+
+        binding.saveBtn.setText("update");
+        getActivity().setTitle("edit recipe");
     }
 }
