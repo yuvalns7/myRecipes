@@ -21,13 +21,10 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
     List<Recipe> data;
     ImageView avatarImage;
     public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener,
-                            List<Recipe> data,RecipeRowBinding binding) {
-        super(binding.getRoot());
-        this.binding = binding;
+                            List<Recipe> data) {
+        super(itemView);
+        this.binding = RecipeRowBinding.bind(itemView);;
         this.data = data;
-//        nameTv = itemView.findViewById(R.id.recipeRow_name_tv);
-//        categoryTv = itemView.findViewById(R.id.recipeRow_category_tv);
-//        avatarImage = itemView.findViewById(R.id.recipeRow_avatar_img);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +52,6 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     public static interface OnItemClickListener{
         void onItemClick(int pos);
     }
-
     LayoutInflater inflater;
     List<Recipe> data;
 
@@ -74,12 +70,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecipeRowBinding binding = RecipeRowBinding.inflate(
-                LayoutInflater.from(parent.getContext()),
-                parent,
-                false);
         View view = inflater.inflate(R.layout.recipe_row,parent,false);
-        return new RecipeViewHolder(view,listener, data, binding);
+        return new RecipeViewHolder(view,listener, data);
     }
 
     @Override
