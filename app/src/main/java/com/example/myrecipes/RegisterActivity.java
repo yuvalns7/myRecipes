@@ -72,7 +72,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(User user) {
         UserModel.instance().registerUser(user, (task) -> {
-            if (task.isSuccessful()) {
+            if (task == null) {
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, "email already exist", Toast.LENGTH_SHORT).show();
+
+            } else if (task.isSuccessful()) {
                 progressDialog.dismiss();
                 sendUserToNextActivity();
                 Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();

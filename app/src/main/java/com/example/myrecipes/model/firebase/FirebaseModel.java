@@ -1,5 +1,6 @@
 package com.example.myrecipes.model.firebase;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.myrecipes.MyApplication;
 import com.example.myrecipes.RegisterActivity;
@@ -38,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class FirebaseModel {
     private FirebaseFirestore db;
@@ -61,7 +64,12 @@ public class FirebaseModel {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 mUser=mAuth.getCurrentUser();
-                updateUserProfile(user,null, listener);
+                if (mUser != null) {
+                    updateUserProfile(user,null, listener);
+                } else {
+                    listener.onComplete(null);
+                }
+
             }
         });
     }
