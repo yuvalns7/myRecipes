@@ -48,6 +48,11 @@ public class UserRecipesListFragment extends Fragment {
 
         viewModel.getData().observe(getViewLifecycleOwner(),list->{
             adapter.setData(list);
+            if (adapter.getItemCount() == 0){
+                binding.noRecipesImg.setVisibility(View.VISIBLE);
+            } else {
+                binding.noRecipesImg.setVisibility(View.GONE);
+            }
         });
 
         return view;
