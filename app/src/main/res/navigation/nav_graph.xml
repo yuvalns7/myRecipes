@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/userRecipesListFragment"
         android:name="com.example.myrecipes.UserRecipesListFragment"
-        android:label="fragment_user_recipes_list"
+        android:label="My recipes"
         tools:layout="@layout/fragment_user_recipes_list" >
         <action
             android:id="@+id/action_userRecipesListFragment_to_addEditRecipeFragment"
