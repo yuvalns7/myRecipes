@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
             } else {
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Invalid username and password", Toast.LENGTH_SHORT).show();
 
             }
         });
