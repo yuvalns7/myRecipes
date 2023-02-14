@@ -93,6 +93,7 @@ public class UserProfileFragment extends Fragment {
         }
 
         binding.updateProfileBtn.setOnClickListener((view1) -> {
+            binding.progressBar.setVisibility(View.VISIBLE);
             String name = binding.fullNameProfile.getEditText().getText().toString();
 
             if (isFormValid(name)) {
@@ -109,8 +110,10 @@ public class UserProfileFragment extends Fragment {
                     if (task.isSuccessful()) {
                         binding.fullName.setText(user.getName());
                         Toast.makeText(getActivity(), "update user profile Successful", Toast.LENGTH_SHORT).show();
+                        binding.progressBar.setVisibility(View.GONE);
                     } else {
                         Toast.makeText(getActivity(), "update user profile failed", Toast.LENGTH_SHORT).show();
+                        binding.progressBar.setVisibility(View.GONE);
                     }
                 });
             }
